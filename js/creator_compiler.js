@@ -116,6 +116,8 @@ function load_arch_select ( cfg ) //TODO: repeated?
       backup_stack_address = architecture.memory_layout[4].value;
       backup_data_address  = architecture.memory_layout[3].value;
 
+      if (architecture.interrupts?.enabled) enableInterrupts();
+
       ret.token = "The selected architecture has been loaded correctly";
       ret.type  = "success";
       return ret;
@@ -132,7 +134,7 @@ function assembly_compiler(library)
 {
         /* Google Analytics */
         creator_ga('compile', 'compile.assembly');
-        
+
         instructions = [];
         creator_memory_clear() ;
         extern = [];
@@ -178,7 +180,7 @@ function assembly_compiler(library)
         {
           for (var j = 0; j < architecture.components[i].elements.length; j++)
           {
-            if (architecture.components[i].elements[j].properties.includes("program_counter")) 
+            if (architecture.components[i].elements[j].properties.includes("program_counter"))
             {
               architecture.components[i].elements[j].value          = bi_intToBigInt(library_offset,10) ;
               architecture.components[i].elements[j].default_value  = bi_intToBigInt(library_offset,10) ;

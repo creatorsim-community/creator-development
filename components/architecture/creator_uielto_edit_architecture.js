@@ -93,6 +93,8 @@
                     backup_stack_address = architecture.memory_layout[4].value;
                     backup_data_address  = architecture.memory_layout[3].value;
 
+                    if (architecture.interrupts?.enabled) enableInterrupts();
+
                     //Reset execution
                     instructions = [];
                     app._data.instructions = instructions;

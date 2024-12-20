@@ -18,6 +18,12 @@ function getStringFromWasm0(ptr, len) {
     return cachedTextDecoder.decode(getUint8ArrayMemory0().subarray(ptr, ptr + len));
 }
 
+function _assertBoolean(n) {
+    if (typeof(n) !== 'boolean') {
+        throw new Error(`expected a boolean argument, found ${typeof(n)}`);
+    }
+}
+
 let WASM_VECTOR_LEN = 0;
 
 const cachedTextEncoder = (typeof TextEncoder !== 'undefined' ? new TextEncoder('utf-8') : { encode: () => { throw Error('TextEncoder not available') } } );
@@ -36,6 +42,8 @@ const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
 });
 
 function passStringToWasm0(arg, malloc, realloc) {
+
+    if (typeof(arg) !== 'string') throw new Error(`expected a string argument, found ${typeof(arg)}`);
 
     if (realloc === undefined) {
         const buf = cachedTextEncoder.encode(arg);
@@ -65,7 +73,7 @@ function passStringToWasm0(arg, malloc, realloc) {
         ptr = realloc(ptr, len, len = offset + arg.length * 3, 1) >>> 0;
         const view = getUint8ArrayMemory0().subarray(ptr + offset, ptr + len);
         const ret = encodeString(arg, view);
-
+        if (ret.read !== arg.length) throw new Error('failed to pass whole string');
         offset += ret.written;
         ptr = realloc(ptr, len, offset, 1) >>> 0;
     }
@@ -160,6 +168,10 @@ function takeFromExternrefTable0(idx) {
     return value;
 }
 
+function _assertNum(n) {
+    if (typeof(n) !== 'number') throw new Error(`expected a number argument, found ${typeof(n)}`);
+}
+
 function getArrayJsValueFromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     const mem = getDataViewMemory0();
@@ -169,6 +181,22 @@ function getArrayJsValueFromWasm0(ptr, len) {
     }
     wasm.__wbindgen_export_5(ptr, len);
     return result;
+}
+
+function logError(f, args) {
+    try {
+        return f.apply(this, args);
+    } catch (e) {
+        let error = (function () {
+            try {
+                return e instanceof Error ? `${e.message}\n\nStack:\n${e.stack}` : e.toString();
+            } catch(_) {
+                return "<failed to stringify thrown value>";
+            }
+        }());
+        console.error("wasm-bindgen: imported JS function that was not marked as `catch` threw an error:", error);
+        throw e;
+    }
 }
 
 function addToExternrefTable0(obj) {
@@ -211,6 +239,10 @@ const ArchitectureJSFinalization = (typeof FinalizationRegistry === 'undefined')
  *r" Architecture definition
  */
 export class ArchitectureJS {
+
+    constructor() {
+        throw new Error('cannot invoke `new` directly');
+    }
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -262,6 +294,8 @@ export class ArchitectureJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.architecturejs_toString(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -293,10 +327,15 @@ export class ArchitectureJS {
      * @returns {CompiledCodeJS}
      */
     compile(src, reserved_offset, labels, library, color) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(src, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
+        _assertNum(reserved_offset);
         const ptr1 = passStringToWasm0(labels, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len1 = WASM_VECTOR_LEN;
+        _assertBoolean(library);
+        _assertNum(color);
         const ret = wasm.architecturejs_compile(this.__wbg_ptr, ptr0, len0, reserved_offset, ptr1, len1, library, color);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
@@ -329,6 +368,10 @@ const CompiledCodeJSFinalization = (typeof FinalizationRegistry === 'undefined')
  */
 export class CompiledCodeJS {
 
+    constructor() {
+        throw new Error('cannot invoke `new` directly');
+    }
+
     static __wrap(ptr) {
         ptr = ptr >>> 0;
         const obj = Object.create(CompiledCodeJS.prototype);
@@ -353,6 +396,8 @@ export class CompiledCodeJS {
      * @returns {(InstructionJS)[]}
      */
     get instructions() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_compiledcodejs_instructions(this.__wbg_ptr);
         var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]).slice();
         wasm.__wbindgen_export_4(ret[0], ret[1] * 4, 4);
@@ -363,6 +408,8 @@ export class CompiledCodeJS {
      * @returns {(DataJS)[]}
      */
     get data() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_compiledcodejs_data(this.__wbg_ptr);
         var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]).slice();
         wasm.__wbindgen_export_4(ret[0], ret[1] * 4, 4);
@@ -373,6 +420,8 @@ export class CompiledCodeJS {
      * @returns {(LabelJS)[]}
      */
     get label_table() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_compiledcodejs_label_table(this.__wbg_ptr);
         var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]).slice();
         wasm.__wbindgen_export_4(ret[0], ret[1] * 4, 4);
@@ -386,6 +435,8 @@ export class CompiledCodeJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.compiledcodejs_toString(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -403,6 +454,10 @@ const DataJSFinalization = (typeof FinalizationRegistry === 'undefined')
  * Compiled data wrapper
  */
 export class DataJS {
+
+    constructor() {
+        throw new Error('cannot invoke `new` directly');
+    }
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -428,6 +483,8 @@ export class DataJS {
      * @returns {bigint}
      */
     address() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.datajs_address(this.__wbg_ptr);
         return ret;
     }
@@ -436,6 +493,8 @@ export class DataJS {
      * @returns {(string)[]}
      */
     labels() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.datajs_labels(this.__wbg_ptr);
         var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]).slice();
         wasm.__wbindgen_export_4(ret[0], ret[1] * 4, 4);
@@ -459,6 +518,9 @@ export class DataJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
+            _assertBoolean(human);
             const ret = wasm.datajs_value(this.__wbg_ptr, human);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -475,6 +537,8 @@ export class DataJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.datajs_type(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -488,6 +552,8 @@ export class DataJS {
      * @returns {DataCategoryJS}
      */
     data_category() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.datajs_data_category(this.__wbg_ptr);
         return ret;
     }
@@ -496,6 +562,8 @@ export class DataJS {
      * @returns {bigint}
      */
     size() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.datajs_size(this.__wbg_ptr);
         return ret;
     }
@@ -508,6 +576,10 @@ const InstructionJSFinalization = (typeof FinalizationRegistry === 'undefined')
  * Compiled instruction wrapper
  */
 export class InstructionJS {
+
+    constructor() {
+        throw new Error('cannot invoke `new` directly');
+    }
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -536,6 +608,8 @@ export class InstructionJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.__wbg_get_instructionjs_address(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -549,6 +623,8 @@ export class InstructionJS {
      * @param {string} arg0
      */
     set address(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
         wasm.__wbg_set_instructionjs_address(this.__wbg_ptr, ptr0, len0);
@@ -558,6 +634,8 @@ export class InstructionJS {
      * @returns {(string)[]}
      */
     get labels() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_instructionjs_labels(this.__wbg_ptr);
         var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]).slice();
         wasm.__wbindgen_export_4(ret[0], ret[1] * 4, 4);
@@ -568,6 +646,8 @@ export class InstructionJS {
      * @param {(string)[]} arg0
      */
     set labels(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passArrayJsValueToWasm0(arg0, wasm.__wbindgen_export_0);
         const len0 = WASM_VECTOR_LEN;
         wasm.__wbg_set_instructionjs_labels(this.__wbg_ptr, ptr0, len0);
@@ -580,6 +660,8 @@ export class InstructionJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.__wbg_get_instructionjs_loaded(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -593,6 +675,8 @@ export class InstructionJS {
      * @param {string} arg0
      */
     set loaded(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
         wasm.__wbg_set_instructionjs_loaded(this.__wbg_ptr, ptr0, len0);
@@ -605,6 +689,8 @@ export class InstructionJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.__wbg_get_instructionjs_binary(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -618,6 +704,8 @@ export class InstructionJS {
      * @param {string} arg0
      */
     set binary(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
         wasm.__wbg_set_instructionjs_binary(this.__wbg_ptr, ptr0, len0);
@@ -630,6 +718,8 @@ export class InstructionJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.__wbg_get_instructionjs_user(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -643,6 +733,8 @@ export class InstructionJS {
      * @param {string} arg0
      */
     set user(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
         wasm.__wbg_set_instructionjs_user(this.__wbg_ptr, ptr0, len0);
@@ -656,6 +748,10 @@ const LabelJSFinalization = (typeof FinalizationRegistry === 'undefined')
  * Label table entry wrapper
  */
 export class LabelJS {
+
+    constructor() {
+        throw new Error('cannot invoke `new` directly');
+    }
 
     static __wrap(ptr) {
         ptr = ptr >>> 0;
@@ -684,6 +780,8 @@ export class LabelJS {
         let deferred1_0;
         let deferred1_1;
         try {
+            if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+            _assertNum(this.__wbg_ptr);
             const ret = wasm.__wbg_get_labeljs_name(this.__wbg_ptr);
             deferred1_0 = ret[0];
             deferred1_1 = ret[1];
@@ -697,15 +795,19 @@ export class LabelJS {
      * @param {string} arg0
      */
     set name(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len0 = WASM_VECTOR_LEN;
-        wasm.__wbg_set_instructionjs_address(this.__wbg_ptr, ptr0, len0);
+        wasm.__wbg_set_labeljs_name(this.__wbg_ptr, ptr0, len0);
     }
     /**
      * Address to which the label points
      * @returns {bigint}
      */
     get address() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_labeljs_address(this.__wbg_ptr);
         return ret;
     }
@@ -714,6 +816,8 @@ export class LabelJS {
      * @param {bigint} arg0
      */
     set address(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         wasm.__wbg_set_labeljs_address(this.__wbg_ptr, arg0);
     }
     /**
@@ -721,6 +825,8 @@ export class LabelJS {
      * @returns {boolean}
      */
     get global() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
         const ret = wasm.__wbg_get_labeljs_global(this.__wbg_ptr);
         return ret !== 0;
     }
@@ -729,6 +835,9 @@ export class LabelJS {
      * @param {boolean} arg0
      */
     set global(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        _assertBoolean(arg0);
         wasm.__wbg_set_labeljs_global(this.__wbg_ptr, arg0);
     }
 }
@@ -767,39 +876,28 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_datajs_new = function(arg0) {
-        const ret = DataJS.__wrap(arg0);
-        return ret;
-    };
+    imports.wbg.__wbg_String_904d95bced5568af = typeof String == 'function' ? String : notDefined('String');
     imports.wbg.__wbindgen_number_new = function(arg0) {
         const ret = arg0;
         return ret;
     };
-    imports.wbg.__wbg_labeljs_new = function(arg0) {
-        const ret = LabelJS.__wrap(arg0);
-        return ret;
-    };
-    imports.wbg.__wbg_instructionjs_new = function(arg0) {
-        const ret = InstructionJS.__wrap(arg0);
-        return ret;
-    };
-    imports.wbg.__wbg_String_904d95bced5568af = typeof String == 'function' ? String : notDefined('String');
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
         const ret = getStringFromWasm0(arg0, arg1);
         return ret;
     };
-    imports.wbg.__wbg_new_abda76e883ba8a5f = function() {
-        const ret = new Error();
+    imports.wbg.__wbg_labeljs_new = function() { return logError(function (arg0) {
+        const ret = LabelJS.__wrap(arg0);
         return ret;
-    };
-    imports.wbg.__wbg_stack_658279fe44541cf6 = function(arg0, arg1) {
-        const ret = arg1.stack;
-        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
-        const len1 = WASM_VECTOR_LEN;
-        getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
-        getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
-    };
-    imports.wbg.__wbg_error_f851667af71bcfc6 = function(arg0, arg1) {
+    }, arguments) };
+    imports.wbg.__wbg_instructionjs_new = function() { return logError(function (arg0) {
+        const ret = InstructionJS.__wrap(arg0);
+        return ret;
+    }, arguments) };
+    imports.wbg.__wbg_datajs_new = function() { return logError(function (arg0) {
+        const ret = DataJS.__wrap(arg0);
+        return ret;
+    }, arguments) };
+    imports.wbg.__wbg_error_f851667af71bcfc6 = function() { return logError(function (arg0, arg1) {
         let deferred0_0;
         let deferred0_1;
         try {
@@ -809,23 +907,17 @@ function __wbg_get_imports() {
         } finally {
             wasm.__wbindgen_export_4(deferred0_0, deferred0_1, 1);
         }
-    };
-    imports.wbg.__wbg_BigInt_d9b88f4c25429f16 = typeof BigInt == 'function' ? BigInt : notDefined('BigInt');
-    imports.wbg.__wbindgen_lt = function(arg0, arg1) {
-        const ret = arg0 < arg1;
+    }, arguments) };
+    imports.wbg.__wbg_new_abda76e883ba8a5f = function() { return logError(function () {
+        const ret = new Error();
         return ret;
-    };
-    imports.wbg.__wbindgen_neg = function(arg0) {
-        const ret = -arg0;
-        return ret;
-    };
-    imports.wbg.__wbg_newnoargs_1ede4bf2ebbaaf43 = function(arg0, arg1) {
-        const ret = new Function(getStringFromWasm0(arg0, arg1));
-        return ret;
-    };
-    imports.wbg.__wbg_call_a9ef466721e824f2 = function() { return handleError(function (arg0, arg1) {
-        const ret = arg0.call(arg1);
-        return ret;
+    }, arguments) };
+    imports.wbg.__wbg_stack_658279fe44541cf6 = function() { return logError(function (arg0, arg1) {
+        const ret = arg1.stack;
+        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
+        const len1 = WASM_VECTOR_LEN;
+        getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+        getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
     }, arguments) };
     imports.wbg.__wbg_eval_1bab7c4fbae3b3d6 = function() { return handleError(function (arg0, arg1) {
         const ret = eval(getStringFromWasm0(arg0, arg1));
@@ -835,12 +927,26 @@ function __wbg_get_imports() {
         const ret = BigInt(arg0);
         return ret;
     }, arguments) };
-    imports.wbg.__wbg_toString_9d7b87203a38a50b = function(arg0, arg1, arg2) {
+    imports.wbg.__wbg_BigInt_d9b88f4c25429f16 = typeof BigInt == 'function' ? BigInt : notDefined('BigInt');
+    imports.wbg.__wbg_toString_9d7b87203a38a50b = function() { return logError(function (arg0, arg1, arg2) {
         const ret = arg1.toString(arg2);
         const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_export_0, wasm.__wbindgen_export_1);
         const len1 = WASM_VECTOR_LEN;
         getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
         getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+    }, arguments) };
+    imports.wbg.__wbg_newnoargs_1ede4bf2ebbaaf43 = function() { return logError(function (arg0, arg1) {
+        const ret = new Function(getStringFromWasm0(arg0, arg1));
+        return ret;
+    }, arguments) };
+    imports.wbg.__wbg_call_a9ef466721e824f2 = function() { return handleError(function (arg0, arg1) {
+        const ret = arg0.call(arg1);
+        return ret;
+    }, arguments) };
+    imports.wbg.__wbindgen_lt = function(arg0, arg1) {
+        const ret = arg0 < arg1;
+        _assertBoolean(ret);
+        return ret;
     };
     imports.wbg.__wbindgen_string_get = function(arg0, arg1) {
         const obj = arg1;
@@ -849,6 +955,10 @@ function __wbg_get_imports() {
         var len1 = WASM_VECTOR_LEN;
         getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
         getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
+    };
+    imports.wbg.__wbindgen_neg = function(arg0) {
+        const ret = -arg0;
+        return ret;
     };
     imports.wbg.__wbindgen_debug_string = function(arg0, arg1) {
         const ret = debugString(arg1);
