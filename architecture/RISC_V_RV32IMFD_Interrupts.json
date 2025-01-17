@@ -7389,6 +7389,16 @@
       "size": null
     },
     {
+      "name": ".ktext",
+      "action": "kernel_code_segment",
+      "size": null
+    },
+    {
+      "name": ".kdata",
+      "action": "kernel_data_segment",
+      "size": null
+    },
+    {
       "name": ".bss",
       "action": "global_symbol",
       "size": null
@@ -7466,20 +7476,36 @@
   ],
   "memory_layout": [
     {
-      "name": "text start",
+      "name": "ktext start",
       "value": "0x00000000"
     },
     {
-      "name": "text end",
+      "name": "ktext end",
       "value": "0x001FFFFF"
     },
     {
-      "name": "data start",
+      "name": "kdata start",
       "value": "0x00200000"
     },
     {
+      "name": "kdata end",
+      "value": "0x003FFFFF"
+    },
+    {
+      "name": "text start",
+      "value": "0x00400000"
+    },
+    {
+      "name": "text end",
+      "value": "0x005FFFFF"
+    },
+    {
+      "name": "data start",
+      "value": "0x00600000"
+    },
+    {
       "name": "data end",
-      "value": "0x05BBFCBF"
+      "value": "0x08BBFCBF"
     },
     {
       "name": "stack start",

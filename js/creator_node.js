@@ -174,9 +174,13 @@ function get_state ( )
 
     // dump memory
     var addrs = main_memory_get_addresses() ;
+
+    // check if kernel to compute offset
+    let mem_offset = architecture.memory_layout.length == 10 ? 4 : 0;
+
     for (var i=0; i<addrs.length; i++)
     {
-      if(addrs[i] >= parseInt(architecture.memory_layout[3].value)){
+      if(addrs[i] >= parseInt(architecture.memory_layout[mem_offset + 3].value)){
         continue;
       }
 

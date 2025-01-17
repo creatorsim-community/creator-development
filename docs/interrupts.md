@@ -103,7 +103,7 @@ the address of the handler.
 
 > [!NOTE]
 > As we'll see in [Interrupt handling](#interrupt-handling), this requires the
-> handling routine to be at the start of the text (`.text`) segment.
+> handling routine to be at the start of the kernel text (`.ktext`) segment.
 
 Also, the cause of the interrupt is stored in the `MCAUSE` (_Machine Cause_).
 This control register is divided into bit `31`, which holds the interrupt type,

@@ -601,9 +601,15 @@ function reset ()
     }
   }
 
-  architecture.memory_layout[4].value = backup_stack_address;
-  architecture.memory_layout[3].value = backup_data_address;
+  // reset stack
 
+  // check if kernel to compute offset
+  let mem_offset = architecture.memory_layout.length == 10 ? 4 : 0;
+
+  architecture.memory_layout[mem_offset + 4].value = backup_stack_address;
+  architecture.memory_layout[mem_offset + 3].value = backup_data_address;
+
+  // reset interrupts
   if (architecture.interrupts?.enabled) enableInterrupts();
 
   // reset memory
@@ -690,25 +696,29 @@ function writeStackLimit ( stackLimit )
   if (stackLimit == null) {
       return ;
   }
-  if (stackLimit <= parseInt(architecture.memory_layout[3].value) && stackLimit >= parseInt(parseInt(architecture.memory_layout[2].value)))
+
+  // check if kernel to compute offset
+  let mem_offset = architecture.memory_layout.length == 10 ? 4 : 0;
+
+  if (stackLimit <= parseInt(architecture.memory_layout[mem_offset + 3].value) && stackLimit >= parseInt(parseInt(architecture.memory_layout[mem_offset + 2].value)))
   {
     draw.danger.push(execution_index);
     throw packExecute(true, 'Stack pointer cannot be placed in the data segment', 'danger', null);
   }
-  else if(stackLimit <= parseInt(architecture.memory_layout[1].value) && stackLimit >= parseInt(architecture.memory_layout[0].value))
+  else if(stackLimit <= parseInt(architecture.memory_layout[mem_offset + 1].value) && stackLimit >= parseInt(architecture.memory_layout[mem_offset + 0].value))
   {
     draw.danger.push(execution_index);
     throw packExecute(true, 'Stack pointer cannot be placed in the text segment', 'danger', null);
   }
   else
   {
-    var diff = parseInt(architecture.memory_layout[4].value) - stackLimit ;
+    var diff = parseInt(architecture.memory_layout[mem_offset + 4].value) - stackLimit ;
     if (diff > 0) {
       creator_memory_zerofill(stackLimit, diff) ;
     }
 
     track_stack_setsp(stackLimit);
-    architecture.memory_layout[4].value = "0x" + (stackLimit.toString(16)).padStart(8, "0").toUpperCase();
+    architecture.memory_layout[mem_offset + 4].value = "0x" + (stackLimit.toString(16)).padStart(8, "0").toUpperCase();
   }
 }
 
