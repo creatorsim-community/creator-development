@@ -124,7 +124,7 @@ register.
 
 ### Interrupt handling
 A full example of handling an environment call is provided in
-[`examples/riscv-interrupts/ex0.s`](../examples/riscv-interrupts/ex0.s).
+[`examples/riscv-interrupts/example1.s`](../examples/riscv-interrupts/example1.s).
 
 First, we need to talk about some new privileged instructions:
 

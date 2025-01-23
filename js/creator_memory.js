@@ -273,6 +273,7 @@ function main_memory_read_bydatatype ( addr, type )
 
           case 'w':
           case 'integer':
+          case 'int':
           case 'word':
                ret = "0x" + main_memory_read_nbytes(addr, word_size_bytes) ;
                ret = parseInt(ret, 16) ;
@@ -440,6 +441,18 @@ function main_memory_write_bydatatype ( addr, value, type, value_human )
                      ret = main_memory_write_nbytes(addr, value, size, type) ;
                      main_memory_datatypes_update_or_create(addr, value_human, size, type);
                      break;
+
+                case 'char': {
+                     main_memory_write_nbytes(
+                         addr,
+                         creator_memory_value_by_type(value.charCodeAt(0), 'bu'),
+                         1,
+                         type
+                    ) ;
+                     main_memory_datatypes_update_or_create(addr, value_human, size, 'byte');
+                     break;
+                }
+
         }
 
         return ret ;

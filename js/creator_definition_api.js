@@ -71,7 +71,7 @@ function capi_mem_write ( addr, value, type, reg_name )
 	// 1) check address is aligned
 	if (capi_bad_align(addr, type))
 	{
-		capi_raise("The memory must be align") ;
+		capi_raise("The memory must be aligned") ;
 		creator_executor_exit( true );
 	}
 
@@ -122,7 +122,7 @@ function capi_mem_read ( addr, type, reg_name )
 	// 1) check address is aligned
 	if (capi_bad_align(addr, type))
 	{
-		capi_raise("The memory must be align") ;
+		capi_raise("The memory must be aligned") ;
 		creator_executor_exit( true );
 	}
 

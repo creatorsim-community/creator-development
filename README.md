@@ -187,7 +187,7 @@ This will open up the application in [localhost:8080](http://localhost:8080).
   * :technologist: Lucas Elvira Martín (RISC-V and several improvements)
   * :technologist: José Antonio Verde Jiménez (Real hardware integration)
   * :technologist: Álvaro Guerrero Espinosa (New compiler)
-  * :technologist: Luis Daniel Casais Mezquida (Interrupts & Kernel support)
+  * :technologist: Luis Daniel Casais Mezquida (Interrupts, kernel support, and devices)
 
 
 ## ChangeLog

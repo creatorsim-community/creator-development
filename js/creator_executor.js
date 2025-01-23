@@ -497,6 +497,10 @@ function execute_instruction ( )
       }
     }
 
+    // devices
+    handleDevices();
+
+
     if ((execution_index >= instructions.length) && (run_program === 3))
     {
       for (var i = 0; i < instructions.length; i++) {

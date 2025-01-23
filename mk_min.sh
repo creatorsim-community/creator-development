@@ -33,6 +33,7 @@ cat js/creator_bigint.js \
     js/creator_compiler.js \
     js/creator_interrupt.js \
     js/creator_executor.js \
+    js/creator_devices.js \
     \
     components/general/creator_uielto_loading.js \
     components/general/creator_uielto_supported_browser.js \
@@ -115,6 +116,7 @@ cat js/creator_bigint.js \
     js/creator_compiler.js \
     js/creator_executor.js \
     js/creator_interrupt.js \
+    js/creator_devices.js \
     \
     js/creator_node.js > js/min.creator_node.js
 

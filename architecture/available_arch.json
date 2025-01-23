@@ -24,7 +24,7 @@
     "available": 1
   },
   {
-    "name": "RISC-V (RV32IMFD, Interrupts)",
+    "name": "RISC-V (interrupts)",
     "alias": [""],
     "file": "RISC_V_RV32IMFD_Interrupts",
     "img": "./images/risc-v_logo.png",
