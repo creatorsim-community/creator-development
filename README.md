@@ -32,16 +32,8 @@
 | :clipboard:  Tests           | [Test Descriptions](docs/test.md)               | 
 
 
-#### Executing locally from source
-You need to run the application inside a web server. The easiest way is to set up a small HTTP server with Python:
-```
-python -m http.server 8080
-```
 
-This will open up the application in [localhost:8080](http://localhost:8080).
-
-
-### Supported Internet Browser
+### Supported Internet Browsers
 
 ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white)
 ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white)
