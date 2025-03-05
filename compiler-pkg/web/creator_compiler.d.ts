@@ -200,6 +200,8 @@ export interface InitOutput {
   readonly __wbg_get_compiledcodejs_label_table: (a: number) => Array;
   readonly compiledcodejs_toString: (a: number) => Array;
   readonly __wbg_labeljs_free: (a: number, b: number) => void;
+  readonly __wbg_get_labeljs_name: (a: number) => Array;
+  readonly __wbg_set_labeljs_name: (a: number, b: number, c: number) => void;
   readonly __wbg_get_labeljs_address: (a: number) => number;
   readonly __wbg_set_labeljs_address: (a: number, b: number) => void;
   readonly __wbg_get_labeljs_global: (a: number) => number;
@@ -222,8 +224,6 @@ export interface InitOutput {
   readonly datajs_type: (a: number) => Array;
   readonly datajs_data_category: (a: number) => number;
   readonly datajs_size: (a: number) => number;
-  readonly __wbg_set_labeljs_name: (a: number, b: number, c: number) => void;
-  readonly __wbg_get_labeljs_name: (a: number) => Array;
   readonly __wbindgen_export_0: (a: number, b: number) => number;
   readonly __wbindgen_export_1: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
