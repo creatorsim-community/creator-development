@@ -1,6 +1,6 @@
 
 .data
-    delay:  .word 1000
+    time:  .word 1000
     buttonPin: .word  4
     ledpin: .word 5
     buttonState:    .word   0
@@ -11,7 +11,7 @@ setup:
     li a0, 115200
     addi sp, sp, -4      
     sw ra, 0(sp)          
-    jal ra, cr_serial_begin
+    jal ra, serial_begin
     lw ra, 0(sp)          
     addi sp, sp, 4            
 
@@ -21,7 +21,7 @@ setup:
     li a1,  0x05 #INPUT_PULLUP
     addi sp, sp, -4      
     sw ra, 0(sp)   
-    jal ra, cr_pinMode
+    jal ra, pinMode
     lw ra, 0(sp)          
     addi sp, sp, 4
     
@@ -31,7 +31,7 @@ setup:
     li a1,  0x03 #OUTPUT
     addi sp, sp, -4      
     sw ra, 0(sp)   
-    jal ra, cr_pinMode
+    jal ra, pinMode
     lw ra, 0(sp)          
     addi sp, sp, 4
 
@@ -41,20 +41,20 @@ button_pressed:
     la a0, msg
     addi sp, sp, -16       
     sw ra, 12(sp)          
-    jal ra,cr_serial_printf
+    jal ra, serial_printf
     lw ra, 12(sp)          
     addi sp, sp, 16       
     
     la a0, ledpin
     lw a0, 0(a0)
     li a1, 0x1
-    jal ra, cr_digitalWrite
+    jal ra, digitalWrite
     
-    la a0, delay
+    la a0, time
     lw a0, 0(a0)
     addi sp, sp, -16      
     sw ra, 12(sp)
-    jal ra, cr_delay
+    jal ra, delay
     lw ra, 12(sp)          
     addi sp, sp, 16 
     
@@ -66,7 +66,7 @@ loop:
     lw a0, 0(a0)       
     addi sp, sp, -4      
     sw ra, 0(sp)          
-    jal ra, cr_digitalRead
+    jal ra, digitalRead
     lw ra, 0(sp)          
     addi sp, sp, 4
 
@@ -79,13 +79,13 @@ loop:
     la a0, ledpin
     lw a0, 0(a0)
     li a1, 0x0
-    jal ra, cr_digitalWrite
+    jal ra, digitalWrite
     
-    la a0, delay
+    la a0, time
     lw a0, 0(a0)
     addi sp, sp, -16      
     sw ra, 12(sp)
-    jal ra, cr_delay
+    jal ra, delay
     lw ra, 12(sp)          
     addi sp, sp, 16 
 
@@ -94,11 +94,10 @@ loop:
 main:
     addi sp, sp, -16       
     sw ra, 12(sp)          
-    jal ra, cr_initArduino    
+    jal ra, initArduino    
     jal ra, setup
     lw ra, 12(sp)          
-    addi sp, sp, 16       
-    li  t4, 0
-    beqz t4, loop 
+    addi sp, sp, 16 
+    j loop
     jr ra
     ret 

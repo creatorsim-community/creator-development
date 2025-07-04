@@ -1,33 +1,75 @@
 
 .data
-    msg: .string "Hello %s\n"
-    arg: .string "World"
+    .align 2             
+    msg:    .string "Waiting for data...\n"
+    
+    .align 2             
+    sol:    .string "Result: %c\n"
+    
+    .align 2             
+    time:  .word 3000000
 
-
-.text
+.text 
 setup:
     li a0,115200 
     addi sp, sp, -4      
     sw ra, 0(sp)     
-    jal ra,cr_serial_begin
+    jal ra, serial_begin
     lw ra, 0(sp)     
-    addi sp, sp,4 
+    addi sp, sp,4
 
     la a0, msg
-    la a1, arg
     addi sp, sp, -16       
     sw ra, 12(sp)          
-    jal ra,cr_serial_printf
+    jal ra, serial_printf
     lw ra, 12(sp)          
     addi sp, sp, 16       
     jr ra
+
 loop:
-    nop
+    addi sp, sp, -16      
+    sw ra, 12(sp)     
+    jal ra, serial_available
+    lw ra, 12(sp)     
+    addi sp, sp,16 
+    mv t2,a0
+    bgez t2, loop_2
+    jr ra
+loop_2:
+    addi sp, sp, -16      
+    sw ra, 12(sp)     
+    jal ra, serial_read
+    lw ra, 12(sp)     
+    addi sp, sp,16 
+
+    mv a1,a0
+    la a0, sol
+    addi sp, sp, -16       
+    sw ra, 12(sp)
+    li a7, 1 
+    jal ra, serial_printf        
+    lw ra, 12(sp)          
+    addi sp, sp, 16       
+
+    la a0, time
+    lw a0, 0(a0)
+    addi sp, sp, -16      
+    sw ra, 12(sp)
+    jal ra, delayMicroseconds
+    lw ra, 12(sp)          
+    addi sp, sp, 16
+
+
+    bgez t2, loop
+    jr ra
+
 main:
     addi sp, sp, -16       
     sw ra, 12(sp)          
-    jal ra, cr_initArduino
-    jal ra,setup
+    jal ra,  initArduino    
+    jal ra, setup
     lw ra, 12(sp)          
-    addi sp, sp, 16       
-    jr ra
+    addi sp, sp, 16          
+    j loop
+    jr ra 
+
