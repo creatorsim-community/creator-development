@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2018-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -247,16 +246,26 @@
                         {
                           if(execution_index >= 0 && (execution_index + 4) < instructions.length)
                           {
-                            var id = "#inst_table__row_" + instructions[execution_index + (parseInt(architecture.arch_conf[1].value) / 8)].Address;
+                            //var id = "#inst_table__row_" + instructions[execution_index + (parseInt(architecture.arch_conf[1].value) / 8)].Address;
+                            var jump = Math.floor(parseInt(architecture.arch_conf[1].value) / 8);
+                            var targetIndex = Math.min(execution_index + jump, instructions.length - 1);
+                            //console.log("execution_index:", execution_index, "jump:", jump, "targetIndex:", targetIndex);
+                            if (instructions[targetIndex]) {
+                                //console.log("instructions[targetIndex] existe:", instructions[targetIndex]);
+                                var id = "#inst_table__row_" + instructions[targetIndex].Address;
+                            } else {
+                                console.warn("Índice inválido o instrucción no existe:", targetIndex);
+                            }
                             var row_pos = $(id).position();
                             if(row_pos)
                             {
-                              var pos = row_pos.top - $('.instructions_table').height();
+                              var pos = row_pos.top - $('.instructions_table').height() + 50;
                               $('.instructions_table').animate({scrollTop: (pos)}, 200);
                             }
                           }
                           else if(execution_index > 0 && (execution_index + 4) >= instructions.length){
-                            $('.instructions_table').animate({scrollTop: ($('.instructions_table').height())}, 300);
+                            //$('.instructions_table').animate({scrollTop: ($('.instructions_table').height())}, 300);
+                            $('.instructions_table').animate({scrollTop: $('.instructions_table')[0].scrollHeight}, 300);
                           }
                         }
 
@@ -388,6 +397,7 @@
                           if  ( 
                                 (run_program == 0)  ||                                                  // stop button pressed
                                 (run_program == 3)  ||                                                  // wait for user input at keyboard
+                                // (run_program == 4)  ||                                                 // wait for delay to stop 
                                 ((instructions[execution_index].Break === true) && (run_program != 2))  // stop because a breakpoint
                               )
                           {
@@ -403,6 +413,10 @@
                             if (instructions[execution_index].Break === true){
                               run_program = 2; //In case breakpoint --> stop
                             }
+
+                            // if (run_program == 4) {
+                            //   setTimeout(uielto_toolbar_btngroup.methods.execute_program_packed, 15, ret, local_this);
+                            //   }
                             return;
                           }
                           else

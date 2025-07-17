@@ -1,743 +1,140 @@
 {
   "instructions_binary": [
-    {
-      "Address": "0x0",
-      "Label": "initArduino",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x8",
-      "Label": "digitalRead",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x10",
-      "Label": "pinMode",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x18",
-      "Label": "digitalWrite",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x20",
-      "Label": "analogRead",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x28",
-      "Label": "analogReadResolution",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x30",
-      "Label": "analogWrite",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x38",
-      "Label": "map",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x40",
-      "Label": "constrain",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x48",
-      "Label": "abs",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x50",
-      "Label": "max",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x58",
-      "Label": "min",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x60",
-      "Label": "pow",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x68",
-      "Label": "bit",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x70",
-      "Label": "bitClear",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x78",
-      "Label": "bitRead",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x80",
-      "Label": "bitSet",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x88",
-      "Label": "bitWrite",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x90",
-      "Label": "highByte",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x98",
-      "Label": "lowByte",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xa0",
-      "Label": "sqrt",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xa8",
-      "Label": "sq",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xb0",
-      "Label": "cos",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xb8",
-      "Label": "sin",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xc0",
-      "Label": "tan",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xc8",
-      "Label": "attachInterrupt",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xd0",
-      "Label": "detachInterrupt",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xd8",
-      "Label": "digitalPinToInterrupt",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xe0",
-      "Label": "pulseIn",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xe8",
-      "Label": "pulseInLong",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xf0",
-      "Label": "shiftIn",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0xf8",
-      "Label": "shiftOut",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x100",
-      "Label": "interrupts",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x108",
-      "Label": "nointerrupts",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x110",
-      "Label": "isDigit",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x118",
-      "Label": "isAlpha",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x120",
-      "Label": "isAlphaNumeric",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x128",
-      "Label": "isAscii",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x130",
-      "Label": "isControl",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x138",
-      "Label": "isPunct",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x140",
-      "Label": "isHexadecimalDigit",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x148",
-      "Label": "isUpperCase",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x150",
-      "Label": "isLowerCase",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x158",
-      "Label": "isPrintable",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x160",
-      "Label": "isGraph",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x168",
-      "Label": "isSpace",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x170",
-      "Label": "isWhiteSpace",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x178",
-      "Label": "delay",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x180",
-      "Label": "delayMicroseconds",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x188",
-      "Label": "randomSeed",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x190",
-      "Label": "random",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x198",
-      "Label": "serial_available",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1a0",
-      "Label": "serial_availableForWrite",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1a8",
-      "Label": "serial_begin",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1b0",
-      "Label": "serial_end",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1b8",
-      "Label": "serial_find",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1c0",
-      "Label": "serial_findUntil",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1c8",
-      "Label": "serial_flush",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1d0",
-      "Label": "serial_parseFloat",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1d8",
-      "Label": "serial_parseInt",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1e0",
-      "Label": "serial_read",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1e8",
-      "Label": "serial_readBytes",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1f0",
-      "Label": "serial_readBytesUntil",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x1f8",
-      "Label": "serial_readString",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x200",
-      "Label": "serial_readStringUntil",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x208",
-      "Label": "serial_write",
-      "loaded": "1000000010000010",
-      "globl": true
-    },
-    {
-      "Address": "0x210",
-      "Label": "serial_printf",
-      "loaded": "1000000010000010",
-      "globl": true
-    }
+    { "Address": "0x0",   "Label": "initArduino", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x4",   "Label": "digitalRead", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x8",   "Label": "pinMode", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xc",   "Label": "digitalWrite", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x10",  "Label": "analogRead", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x14",  "Label": "analogReadResolution", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x18",  "Label": "analogWrite", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x1c",  "Label": "map", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x20",  "Label": "constrain", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x24",  "Label": "abs", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x28",  "Label": "max", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x2c",  "Label": "min", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x30",  "Label": "pow", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x34",  "Label": "bit", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x38",  "Label": "bitClear", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x3c",  "Label": "bitRead", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x40",  "Label": "bitSet", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x44",  "Label": "bitWrite", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x48",  "Label": "highByte", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x4c",  "Label": "lowByte", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x50",  "Label": "sqrt", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x54",  "Label": "sq", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x58",  "Label": "cos", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x5c",  "Label": "sin", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x60",  "Label": "tan", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x64",  "Label": "attachInterrupt", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x68",  "Label": "detachInterrupt", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x6c",  "Label": "digitalPinToInterrupt", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x70",  "Label": "pulseIn", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x74",  "Label": "pulseInLong", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x78",  "Label": "shiftIn", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x7c",  "Label": "shiftOut", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x80",  "Label": "interrupts", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x84",  "Label": "nointerrupts", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x88",  "Label": "isDigit", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x8c",  "Label": "isAlpha", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x90",  "Label": "isAlphaNumeric", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x94",  "Label": "isAscii", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x98",  "Label": "isControl", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x9c",  "Label": "isPunct", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xa0",  "Label": "isHexadecimalDigit", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xa4",  "Label": "isUpperCase", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xa8",  "Label": "isLowerCase", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xac",  "Label": "isPrintable", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xb0",  "Label": "isGraph", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xb4",  "Label": "isSpace", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xb8",  "Label": "isWhiteSpace", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xbc",  "Label": "delay", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xc0",  "Label": "delayMicroseconds", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xc4",  "Label": "randomSeed", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xc8",  "Label": "random", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xcc",  "Label": "serial_available", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xd0",  "Label": "serial_availableForWrite", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xd4",  "Label": "serial_begin", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xd8",  "Label": "serial_end", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xdc",  "Label": "serial_find", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xe0",  "Label": "serial_findUntil", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xe4",  "Label": "serial_flush", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xe8",  "Label": "serial_parseFloat", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xec",  "Label": "serial_parseInt", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xf0",  "Label": "serial_read", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xf4",  "Label": "serial_readBytes", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xf8",  "Label": "serial_readBytesUntil", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0xfc",  "Label": "serial_readString", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x100", "Label": "serial_readStringUntil", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x104", "Label": "serial_write", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x108", "Label": "serial_printf", "loaded": "1000000010000010", "globl": true }
   ],
   "instructions_tag": [
-    {
-      "tag": "initArduino",
-      "addr": 0,
-      "globl": true
-    },
-    {
-      "tag": "digitalRead",
-      "addr": 8,
-      "globl": true
-    },
-    {
-      "tag": "pinMode",
-      "addr": 16,
-      "globl": true
-    },
-    {
-      "tag": "digitalWrite",
-      "addr": 24,
-      "globl": true
-    },
-    {
-      "tag": "analogRead",
-      "addr": 32,
-      "globl": true
-    },
-    {
-      "tag": "analogReadResolution",
-      "addr": 40,
-      "globl": true
-    },
-    {
-      "tag": "analogWrite",
-      "addr": 48,
-      "globl": true
-    },
-    {
-      "tag": "map",
-      "addr": 56,
-      "globl": true
-    },
-    {
-      "tag": "constrain",
-      "addr": 64,
-      "globl": true
-    },
-    {
-      "tag": "abs",
-      "addr": 72,
-      "globl": true
-    },
-    {
-      "tag": "max",
-      "addr": 80,
-      "globl": true
-    },
-    {
-      "tag": "min",
-      "addr": 88,
-      "globl": true
-    },
-    {
-      "tag": "pow",
-      "addr": 96,
-      "globl": true
-    },
-    {
-      "tag": "bit",
-      "addr": 104,
-      "globl": true
-    },
-    {
-      "tag": "bitClear",
-      "addr": 112,
-      "globl": true
-    },
-    {
-      "tag": "bitRead",
-      "addr": 120,
-      "globl": true
-    },
-    {
-      "tag": "bitSet",
-      "addr": 128,
-      "globl": true
-    },
-    {
-      "tag": "bitWrite",
-      "addr": 136,
-      "globl": true
-    },
-    {
-      "tag": "highByte",
-      "addr": 144,
-      "globl": true
-    },
-    {
-      "tag": "lowByte",
-      "addr": 152,
-      "globl": true
-    },
-    {
-      "tag": "sqrt",
-      "addr": 160,
-      "globl": true
-    },
-    {
-      "tag": "sq",
-      "addr": 168,
-      "globl": true
-    },
-    {
-      "tag": "cos",
-      "addr": 176,
-      "globl": true
-    },
-    {
-      "tag": "sin",
-      "addr": 184,
-      "globl": true
-    },
-    {
-      "tag": "tan",
-      "addr": 192,
-      "globl": true
-    },
-    {
-      "tag": "attachInterrupt",
-      "addr": 200,
-      "globl": true
-    },
-    {
-      "tag": "detachInterrupt",
-      "addr": 208,
-      "globl": true
-    },
-    {
-      "tag": "digitalPinToInterrupt",
-      "addr": 216,
-      "globl": true
-    },
-    {
-      "tag": "pulseIn",
-      "addr": 224,
-      "globl": true
-    },
-    {
-      "tag": "pulseInLong",
-      "addr": 232,
-      "globl": true
-    },
-    {
-      "tag": "shiftIn",
-      "addr": 240,
-      "globl": true
-    },
-    {
-      "tag": "shiftOut",
-      "addr": 248,
-      "globl": true
-    },
-    {
-      "tag": "interrupts",
-      "addr": 256,
-      "globl": true
-    },
-    {
-      "tag": "nointerrupts",
-      "addr": 264,
-      "globl": true
-    },
-    {
-      "tag": "isDigit",
-      "addr": 272,
-      "globl": true
-    },
-    {
-      "tag": "isAlpha",
-      "addr": 280,
-      "globl": true
-    },
-    {
-      "tag": "isAlphaNumeric",
-      "addr": 288,
-      "globl": true
-    },
-    {
-      "tag": "isAscii",
-      "addr": 296,
-      "globl": true
-    },
-    {
-      "tag": "isControl",
-      "addr": 304,
-      "globl": true
-    },
-    {
-      "tag": "isPunct",
-      "addr": 312,
-      "globl": true
-    },
-    {
-      "tag": "isHexadecimalDigit",
-      "addr": 320,
-      "globl": true
-    },
-    {
-      "tag": "isUpperCase",
-      "addr": 328,
-      "globl": true
-    },
-    {
-      "tag": "isLowerCase",
-      "addr": 336,
-      "globl": true
-    },
-    {
-      "tag": "isPrintable",
-      "addr": 344,
-      "globl": true
-    },
-    {
-      "tag": "isGraph",
-      "addr": 352,
-      "globl": true
-    },
-    {
-      "tag": "isSpace",
-      "addr": 360,
-      "globl": true
-    },
-    {
-      "tag": "isWhiteSpace",
-      "addr": 368,
-      "globl": true
-    },
-    {
-      "tag": "delay",
-      "addr": 376,
-      "globl": true
-    },
-    {
-      "tag": "delayMicroseconds",
-      "addr": 384,
-      "globl": true
-    },
-    {
-      "tag": "randomSeed",
-      "addr": 392,
-      "globl": true
-    },
-    {
-      "tag": "random",
-      "addr": 400,
-      "globl": true
-    },
-    {
-      "tag": "serial_available",
-      "addr": 408,
-      "globl": true
-    },
-    {
-      "tag": "serial_availableForWrite",
-      "addr": 416,
-      "globl": true
-    },
-    {
-      "tag": "serial_begin",
-      "addr": 424,
-      "globl": true
-    },
-    {
-      "tag": "serial_end",
-      "addr": 432,
-      "globl": true
-    },
-    {
-      "tag": "serial_find",
-      "addr": 440,
-      "globl": true
-    },
-    {
-      "tag": "serial_findUntil",
-      "addr": 448,
-      "globl": true
-    },
-    {
-      "tag": "serial_flush",
-      "addr": 456,
-      "globl": true
-    },
-    {
-      "tag": "serial_parseFloat",
-      "addr": 464,
-      "globl": true
-    },
-    {
-      "tag": "serial_parseInt",
-      "addr": 472,
-      "globl": true
-    },
-    {
-      "tag": "serial_read",
-      "addr": 480,
-      "globl": true
-    },
-    {
-      "tag": "serial_readBytes",
-      "addr": 488,
-      "globl": true
-    },
-    {
-      "tag": "serial_readBytesUntil",
-      "addr": 496,
-      "globl": true
-    },
-    {
-      "tag": "serial_readString",
-      "addr": 504,
-      "globl": true
-    },
-    {
-      "tag": "serial_readStringUntil",
-      "addr": 512,
-      "globl": true
-    },
-    {
-      "tag": "serial_write",
-      "addr": 520,
-      "globl": true
-    },
-        {
-      "tag": "serial_printf",
-      "addr": 528,
-      "globl": true
-    }
+    { "tag": "initArduino", "addr": 0, "globl": true },
+    { "tag": "digitalRead", "addr": 4, "globl": true },
+    { "tag": "pinMode", "addr": 8, "globl": true },
+    { "tag": "digitalWrite", "addr": 12, "globl": true },
+    { "tag": "analogRead", "addr": 16, "globl": true },
+    { "tag": "analogReadResolution", "addr": 20, "globl": true },
+    { "tag": "analogWrite", "addr": 24, "globl": true },
+    { "tag": "map", "addr": 28, "globl": true },
+    { "tag": "constrain", "addr": 32, "globl": true },
+    { "tag": "abs", "addr": 36, "globl": true },
+    { "tag": "max", "addr": 40, "globl": true },
+    { "tag": "min", "addr": 44, "globl": true },
+    { "tag": "pow", "addr": 48, "globl": true },
+    { "tag": "bit", "addr": 52, "globl": true },
+    { "tag": "bitClear", "addr": 56, "globl": true },
+    { "tag": "bitRead", "addr": 60, "globl": true },
+    { "tag": "bitSet", "addr": 64, "globl": true },
+    { "tag": "bitWrite", "addr": 68, "globl": true },
+    { "tag": "highByte", "addr": 72, "globl": true },
+    { "tag": "lowByte", "addr": 76, "globl": true },
+    { "tag": "sqrt", "addr": 80, "globl": true },
+    { "tag": "sq", "addr": 84, "globl": true },
+    { "tag": "cos", "addr": 88, "globl": true },
+    { "tag": "sin", "addr": 92, "globl": true },
+    { "tag": "tan", "addr": 96, "globl": true },
+    { "tag": "attachInterrupt", "addr": 100, "globl": true },
+    { "tag": "detachInterrupt", "addr": 104, "globl": true },
+    { "tag": "digitalPinToInterrupt", "addr": 108, "globl": true },
+    { "tag": "pulseIn", "addr": 112, "globl": true },
+    { "tag": "pulseInLong", "addr": 116, "globl": true },
+    { "tag": "shiftIn", "addr": 120, "globl": true },
+    { "tag": "shiftOut", "addr": 124, "globl": true },
+    { "tag": "interrupts", "addr": 128, "globl": true },
+    { "tag": "nointerrupts", "addr": 132, "globl": true },
+    { "tag": "isDigit", "addr": 136, "globl": true },
+    { "tag": "isAlpha", "addr": 140, "globl": true },
+    { "tag": "isAlphaNumeric", "addr": 144, "globl": true },
+    { "tag": "isAscii", "addr": 148, "globl": true },
+    { "tag": "isControl", "addr": 152, "globl": true },
+    { "tag": "isPunct", "addr": 156, "globl": true },
+    { "tag": "isHexadecimalDigit", "addr": 160, "globl": true },
+    { "tag": "isUpperCase", "addr": 164, "globl": true },
+    { "tag": "isLowerCase", "addr": 168, "globl": true },
+    { "tag": "isPrintable", "addr": 172, "globl": true },
+    { "tag": "isGraph", "addr": 176, "globl": true },
+    { "tag": "isSpace", "addr": 180, "globl": true },
+    { "tag": "isWhiteSpace", "addr": 184, "globl": true },
+    { "tag": "delay", "addr": 188, "globl": true },
+    { "tag": "delayMicroseconds", "addr": 192, "globl": true },
+    { "tag": "randomSeed", "addr": 196, "globl": true },
+    { "tag": "random", "addr": 200, "globl": true },
+    { "tag": "serial_available", "addr": 204, "globl": true },
+    { "tag": "serial_availableForWrite", "addr": 208, "globl": true },
+    { "tag": "serial_begin", "addr": 212, "globl": true },
+    { "tag": "serial_end", "addr": 216, "globl": true },
+    { "tag": "serial_find", "addr": 220, "globl": true },
+    { "tag": "serial_findUntil", "addr": 224, "globl": true },
+    { "tag": "serial_flush", "addr": 228, "globl": true },
+    { "tag": "serial_parseFloat", "addr": 232, "globl": true },
+    { "tag": "serial_parseInt", "addr": 236, "globl": true },
+    { "tag": "serial_read", "addr": 240, "globl": true },
+    { "tag": "serial_readBytes", "addr": 244, "globl": true },
+    { "tag": "serial_readBytesUntil", "addr": 248, "globl": true },
+    { "tag": "serial_readString", "addr": 252, "globl": true },
+    { "tag": "serial_readStringUntil", "addr": 256, "globl": true },
+    { "tag": "serial_write", "addr": 260, "globl": true },
+    { "tag": "serial_printf", "addr": 264, "globl": true }
   ]
 }

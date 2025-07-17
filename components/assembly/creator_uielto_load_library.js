@@ -44,6 +44,7 @@
           library_update(){
                         if (code_binary.length !== 0){
                             update_binary = JSON.parse(code_binary);
+                            console.log("Librería cargada:", update_binary); // <-- Agrega esto
                             load_binary = true;
                             $("#divAssembly").attr("class", "col-lg-10 col-sm-12");
                             $("#divTags").attr("class", "col-lg-2 col-sm-12");
@@ -77,7 +78,8 @@
                       library_load_creatino() {
                         var reader;
                         var baseUrl = window.location.origin; 
-                        var filePath = baseUrl + '/creator/test/riscv/correct/libraries/creatino.o';
+                        var filePath = baseUrl + '/creator-development/test/riscv/correct/libraries/creatino.o';
+                        console.log('Cargando archivo desde:', filePath);
                         
                         fetch(filePath, {
                             method: 'GET',

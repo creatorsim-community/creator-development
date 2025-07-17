@@ -4747,7 +4747,7 @@
           "stopbit": 7
         }
       ],
-      "definition": "rd = PC;\n PC = PC - 4 + inm;\n capi_callconv_begin(PC); capi_drawstack_begin(PC);",
+      "definition": "if (capi_arduino(inm,PC) === false){rd = PC;\n PC = PC - 4 + inm;\n capi_callconv_begin(PC); capi_drawstack_begin(PC)}",
       "separated": [
         false,
         false,

@@ -460,6 +460,7 @@ function execute_instruction ( )
       draw.danger.push(execution_index) ;
       execution_index = -1;
 
+
       return packExecute(true, msg, 'danger', draw) ;
     }
 
@@ -571,6 +572,10 @@ function reset ()
   // Reset console
   keyboard = '' ;
   display  = '' ;
+
+  // Arduino reset
+  initArduino = 0;
+  serial_begin = 0;
 
   for (var i = 0; i < architecture_hash.length; i++)
   {
@@ -919,6 +924,20 @@ function kbd_read_string ( keystroke, params )
 
   return value ;
 }
+function kbd_read_stringUntil ( keystroke, params )
+{
+  // Terminar la lectura al encontrar ';'
+  var endIdx = keystroke.indexOf(';');
+  var value = (endIdx !== -1) ? keystroke.substring(0, endIdx) : keystroke;
+
+  var neltos = readRegister ( params.indexComp2, params.indexElem2 );
+  value = value.substring(0, neltos); // Limitar al tamaño máximo permitido
+
+  var neltos_addr = readRegister ( params.indexComp, params.indexElem );
+  writeMemory(value, parseInt(neltos_addr), "string") ;
+
+  return value ;
+}
 
 
 function keyboard_read ( fn_post_read, fn_post_params)
@@ -971,6 +990,73 @@ function keyboard_read ( fn_post_read, fn_post_params)
 
   if (run_program === 1) {
     //uielto_toolbar_btngroup.methods.execute_program();
+    $("#playExecution").trigger("click");
+  }
+}
+/*
+ * Modification of keyboard_read for Arduino functions
+ */
+function keyboard_read_find ( fn_post_read, fn_post_params, fn_post_find )
+{
+  var draw = {
+    space:   [],
+    info:    [],
+    success: [],
+    warning: [],
+    danger:  [],
+    flash:   []
+  } ;
+
+  // CL
+  if (typeof app === "undefined")
+  {
+    var readlineSync = require('readline-sync') ;
+    var keystroke    = readlineSync.question(' > ') ;
+
+    // Buscar el string "clave" en la entrada
+    if (keystroke.includes(fn_post_find)) {
+      show_notification('¡Se encontró la palabra clave!', 'success');
+      // Puedes realizar alguna acción especial aquí si lo deseas
+    }
+
+    var value = fn_post_read(keystroke, fn_post_params) ;
+    keyboard = keyboard + " " + value;
+
+    return packExecute(false, 'The data has been uploaded', 'danger', null);
+  }
+
+  // UI
+  app._data.enter = false;
+
+  // Buscar el string "clave" en la entrada
+  if (app._data.keyboard && app._data.keyboard.includes("clave")) {
+    show_notification('¡Se encontró la palabra clave!', 'success');
+    // Puedes realizar alguna acción especial aquí si lo deseas
+  }
+
+  if (3 === run_program) {
+    setTimeout(keyboard_read, 1000, fn_post_read, fn_post_params);
+    return;
+  }
+
+  fn_post_read(app._data.keyboard, fn_post_params) ;
+
+  app._data.keyboard = "";
+  app._data.enter = null;
+
+  show_notification('The data has been uploaded', 'info') ;
+
+  if (execution_index >= instructions.length)
+  {
+    for (var i = 0; i < instructions.length; i++){
+      draw.space.push(i) ;
+    }
+
+    execution_index = -2;
+    return packExecute(true, 'The execution of the program has finished', 'success', null);
+  }
+
+  if (run_program === 1) {
     $("#playExecution").trigger("click");
   }
 }
