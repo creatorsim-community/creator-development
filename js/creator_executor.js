@@ -926,17 +926,24 @@ function kbd_read_string ( keystroke, params )
 }
 function kbd_read_stringUntil ( keystroke, params )
 {
-  // Terminar la lectura al encontrar ';'
-  var endIdx = keystroke.indexOf(';');
-  var value = (endIdx !== -1) ? keystroke.substring(0, endIdx) : keystroke;
+  let value = keystroke;
 
-  var neltos = readRegister ( params.indexComp2, params.indexElem2 );
-  value = value.substring(0, neltos); // Limitar al tamaño máximo permitido
+  // Si untilChar está definido y es un string de longitud 1, trunca el string
+  if (typeof untilChar === "string" && untilChar.length === 1) {
+      const idx = value.indexOf(untilChar);
+      if (idx !== -1) {
+          value = value.substring(0, idx);
+      }
+  }
 
-  var neltos_addr = readRegister ( params.indexComp, params.indexElem );
-  writeMemory(value, parseInt(neltos_addr), "string") ;
+  // Limita al tamaño máximo permitido por el buffer
+  const neltos = readRegister(params.indexComp2, params.indexElem2);
+  value = value.substring(0, neltos);
 
-  return value ;
+  const neltos_addr = readRegister(params.indexComp, params.indexElem);
+  writeMemory(value, parseInt(neltos_addr), "string");
+
+  return value;
 }
 
 
@@ -996,7 +1003,7 @@ function keyboard_read ( fn_post_read, fn_post_params)
 /*
  * Modification of keyboard_read for Arduino functions
  */
-function keyboard_read_find ( fn_post_read, fn_post_params, fn_post_find )
+function keyboard_read_until(fn_post_read, fn_post_params, fn_post_until)
 {
   var draw = {
     space:   [],
@@ -1007,18 +1014,32 @@ function keyboard_read_find ( fn_post_read, fn_post_params, fn_post_find )
     flash:   []
   } ;
 
+  if (fn_post_params != null) {
+    var ret1 = crex_findReg(fn_post_until);
+    if (ret1.match == 0) {
+      throw packExecute(true, "capi_syscall: register " + fn_post_until + " not found", 'danger', null);
+    }
+    var until = String.fromCharCode(readRegister(ret1.indexComp, ret1.indexElem));
+    //console.log("until: " + typeof until);
+  }else {
+    var until = 0;
+  }
+
+  console.log("until: " + until);
+
   // CL
   if (typeof app === "undefined")
   {
     var readlineSync = require('readline-sync') ;
     var keystroke    = readlineSync.question(' > ') ;
-
-    // Buscar el string "clave" en la entrada
-    if (keystroke.includes(fn_post_find)) {
-      show_notification('¡Se encontró la palabra clave!', 'success');
-      // Puedes realizar alguna acción especial aquí si lo deseas
+    // Check if there is a lookout
+    if (until != 0 && typeof until === "string") {
+      console.log("Keystroke before until: " + keystroke);
+      const idx = keystroke.indexOf(until);
+      if (idx !== -1) {
+        keystroke = keystroke.substring(0, idx);
+      }
     }
-
     var value = fn_post_read(keystroke, fn_post_params) ;
     keyboard = keyboard + " " + value;
 
@@ -1027,19 +1048,22 @@ function keyboard_read_find ( fn_post_read, fn_post_params, fn_post_find )
 
   // UI
   app._data.enter = false;
-
-  // Buscar el string "clave" en la entrada
-  if (app._data.keyboard && app._data.keyboard.includes("clave")) {
-    show_notification('¡Se encontró la palabra clave!', 'success');
-    // Puedes realizar alguna acción especial aquí si lo deseas
-  }
-
+  console.log("Reading keystroke from UI...");
   if (3 === run_program) {
-    setTimeout(keyboard_read, 1000, fn_post_read, fn_post_params);
+    setTimeout(keyboard_read_until, 1000, fn_post_read, fn_post_params, fn_post_until);
     return;
   }
 
-  fn_post_read(app._data.keyboard, fn_post_params) ;
+  //console.log("DESPUÉS DEL IF run_program, antes de Keystroke log");
+
+
+  if (until != 0 && typeof until === "string") {
+    const idx = app._data.keyboard.indexOf(until);
+    if (idx !== -1) {
+      app._data.keyboard = app._data.keyboard.substring(0, idx);
+    }
+  }
+  fn_post_read(app._data.keyboard, fn_post_params);
 
   app._data.keyboard = "";
   app._data.enter = null;
@@ -1057,10 +1081,113 @@ function keyboard_read_find ( fn_post_read, fn_post_params, fn_post_find )
   }
 
   if (run_program === 1) {
+    //uielto_toolbar_btngroup.methods.execute_program();
     $("#playExecution").trigger("click");
   }
 }
 
+function keyboard_read_find(fn_post_read, fn_post_params,fn_post_until=null) {
+  var draw = {
+    space:   [],
+    info:    [],
+    success: [],
+    warning: [],
+    danger:  [],
+    flash:   []
+  };
+
+  var ret1 = crex_findReg(fn_post_params);
+  if (ret1.match == 0) {
+    throw packExecute(true, "capi_syscall: register " + fn_post_params + " not found", 'danger', null);
+  }
+  var addr = readRegister(ret1.indexComp, ret1.indexElem);
+  var search = readMemory(parseInt(addr), "string");
+  //console.log("search: " + search);
+  // Until functions
+  if (fn_post_until != null && fn_post_until.length > 0) {
+    var ret2 = crex_findReg(fn_post_until);
+    if (ret2.match == 0) {
+      throw packExecute(true, "capi_syscall: register " + fn_post_until + " not found", 'danger', null);
+    }
+    var addr_until = readRegister(ret2.indexComp, ret2.indexElem);
+    var until = readMemory(parseInt(addr_until), "string");
+    //console.log("until: " + until);
+  } else {
+    var until = 0;
+  }
+  // CL
+  if (typeof app === "undefined") {
+    var readlineSync = require('readline-sync');
+    var keystroke = readlineSync.question(' > ');
+
+    if (!keystroke || keystroke.length === 0) {
+      // Cambia run_program a 3 antes de esperar entrada
+      run_program = 3;
+      setTimeout(keyboard_read_find, 1000, fn_post_read, fn_post_params, fn_post_until);
+      return;
+    }
+
+    // for Until
+    if (until != 0 && typeof until === "string") {
+      console.log("Keystroke before until: " + keystroke);
+      const idx = keystroke.indexOf(until);
+      if (idx !== -1) {
+        keystroke = keystroke.substring(0, idx);
+      }
+    }
+
+    if (keystroke.includes(search)) {
+      writeRegister(1, ret1.indexComp, ret1.indexElem);
+    } else {
+      writeRegister(0, ret1.indexComp, ret1.indexElem);
+    }
+    return packExecute(false, 'The result has been written to the register', 'info', null);
+  }
+
+  // UI
+  app._data.enter = false;
+
+  if (!app._data.keyboard || app._data.keyboard.length === 0) {
+    // Cambia run_program a 3 antes de esperar entrada
+    run_program = 3;
+    setTimeout(keyboard_read_find, 1000, fn_post_read, fn_post_params, fn_post_until);
+    return;
+  }
+
+      // for Until
+    if (until != 0 && typeof until === "string") {
+      console.log("Keystroke before until: " + app._data.keyboard);
+      const idx = app._data.keyboard.indexOf(until);
+      console.log("Keystroke: " + idx);
+      if (idx !== -1) {
+        app._data.keyboard = app._data.keyboard.substring(0, idx);
+        console.log("Keystroke modified for until: " + app._data.keyboard);
+      }
+    }
+
+  if (app._data.keyboard.includes(search)) {
+    writeRegister(1, ret1.indexComp, ret1.indexElem);
+  } else {
+    writeRegister(0, ret1.indexComp, ret1.indexElem);
+  }
+
+  app._data.keyboard = "";
+  app._data.enter = null;
+
+  show_notification('The result has been written to the register', 'info');
+
+  if (execution_index >= instructions.length) {
+    for (var i = 0; i < instructions.length; i++) {
+      draw.space.push(i);
+    }
+    execution_index = -2;
+    return packExecute(true, 'The execution of the program has finished', 'success', null);
+  }
+
+  if (run_program === 1) {
+    $("#playExecution").trigger("click");
+  }
+}
 
 /*
  *  Execute binary

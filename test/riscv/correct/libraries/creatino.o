@@ -63,10 +63,13 @@
     { "Address": "0xf0",  "Label": "serial_read", "loaded": "1000000010000010", "globl": true },
     { "Address": "0xf4",  "Label": "serial_readBytes", "loaded": "1000000010000010", "globl": true },
     { "Address": "0xf8",  "Label": "serial_readBytesUntil", "loaded": "1000000010000010", "globl": true },
-    { "Address": "0xfc",  "Label": "serial_readString", "loaded": "1000000010000010", "globl": true },
-    { "Address": "0x100", "Label": "serial_readStringUntil", "loaded": "1000000010000010", "globl": true },
-    { "Address": "0x104", "Label": "serial_write", "loaded": "1000000010000010", "globl": true },
-    { "Address": "0x108", "Label": "serial_printf", "loaded": "1000000010000010", "globl": true }
+    { "Address": "0xfc", "Label": "serial_write", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x100", "Label": "serial_printf", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x104", "Label": "fabs", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x108", "Label": "fmax", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x10c", "Label": "fmin", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x110", "Label": "sqrtf", "loaded": "1000000010000010", "globl": true },
+    { "Address": "0x114", "Label": "sqf", "loaded": "1000000010000010", "globl": true }
   ],
   "instructions_tag": [
     { "tag": "initArduino", "addr": 0, "globl": true },
@@ -132,9 +135,12 @@
     { "tag": "serial_read", "addr": 240, "globl": true },
     { "tag": "serial_readBytes", "addr": 244, "globl": true },
     { "tag": "serial_readBytesUntil", "addr": 248, "globl": true },
-    { "tag": "serial_readString", "addr": 252, "globl": true },
-    { "tag": "serial_readStringUntil", "addr": 256, "globl": true },
-    { "tag": "serial_write", "addr": 260, "globl": true },
-    { "tag": "serial_printf", "addr": 264, "globl": true }
+    { "tag": "serial_write", "addr": 252, "globl": true },
+    { "tag": "serial_printf", "addr": 256, "globl": true },
+    { "tag": "fabs", "addr": 260, "globl": true },
+    { "tag": "fmax", "addr": 264, "globl": true },
+    { "tag": "fmin", "addr": 268, "globl": true },
+    { "tag": "sqrtf", "addr": 272, "globl": true },
+    { "tag": "sqf", "addr": 276, "globl": true }
   ]
 }

@@ -104,7 +104,8 @@ const hookMap = {
 		var constrained = Math.max(lower, Math.min(value, upper));
 		writeRegister(constrained, ret1.indexComp, ret1.indexElem);
 	},
-    0x24:   function cr_abs() {
+
+	    0x24:   function cr_abs() {
 		console.log("abs");
 		var ret1 = crex_findReg('a0');
 		if (ret1.match === 0) {
@@ -113,12 +114,12 @@ const hookMap = {
 		var value = readRegister(ret1.indexComp, ret1.indexElem);
 		console.log("abs: value = " + value);
 		// Calculate the absolute value
-		if (value < 0) {
-			value = -value;
-		}
+		value = value > 0 ? value : -value;
 		writeRegister(value, ret1.indexComp, ret1.indexElem);
 
 		},
+		
+		
     0x28:   function cr_max() {
 		console.log("max");
 		// Value 1
@@ -370,16 +371,7 @@ const hookMap = {
 			throw packExecute(true, "capi_syscall: register a0/fa0 not found", 'danger', null);	
 		} 
 		value1 = readRegister(ret1.indexComp, ret1.indexElem);
-		if (value1 === undefined) {
-			ret1 = crex_findReg('fa0');
-			if (ret1.match === 0) {
-				console.log("capi_syscall: register a0/fa0 not found");
-				throw packExecute(true, "capi_syscall: register a0/fa0 not found", 'danger', null);
-			}
-			value1 = readRegister(ret1.indexComp, ret1.indexElem, "SFP-Reg");
-			console.log("cr_max: value1 is a float = " + value1);
-		}
-			// Find the maximum value
+		// Square root calculation
 			const sqrt = Math.sqrt(value1);
 			writeRegister(sqrt, ret1.indexComp, ret1.indexElem);
 	},
@@ -390,14 +382,6 @@ const hookMap = {
 			throw packExecute(true, "capi_syscall: register a0/fa0 not found", 'danger', null);	
 		} 
 		value1 = readRegister(ret1.indexComp, ret1.indexElem);
-		if (value1 === undefined) {
-			ret1 = crex_findReg('fa0');
-			if (ret1.match === 0) {
-				console.log("capi_syscall: register a0/fa0 not found");
-				throw packExecute(true, "capi_syscall: register a0/fa0 not found", 'danger', null);
-			}
-			value1 = readRegister(ret1.indexComp, ret1.indexElem, "SFP-Reg");
-		}
 		const sq = value1*value1;
 		writeRegister(sq, ret1.indexComp, ret1.indexElem);
 	},
@@ -406,28 +390,28 @@ const hookMap = {
 		if (ret1.match === 0) {
 			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
 		} 
-		value1 = readRegister(ret1.indexComp, ret1.indexElem);
+		value1 = readRegister(ret1.indexComp, ret1.indexElem,"SFP-Reg");
 		const cos = Math.cos(value1);
-		writeRegister(cos, ret1.indexComp, ret1.indexElem);
+		writeRegister(cos, ret1.indexComp, ret1.indexElem,"SFP-Reg");
 	},
     0x5c:   function cr_sin() {console.log("sin");
 		var ret1 = crex_findReg('fa0');
 		if (ret1.match === 0) {
 			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
 		} 
-		value1 = readRegister(ret1.indexComp, ret1.indexElem);
+		value1 = readRegister(ret1.indexComp, ret1.indexElem,"SFP-Reg");
 		const sin = Math.sin(value1);
 		console.log("cr_sin: value1 = " + value1 + ", sin = " + sin);
-		writeRegister(sin, ret1.indexComp, ret1.indexElem);
+		writeRegister(sin, ret1.indexComp, ret1.indexElem,"SFP-Reg");
 	},
     0x60:   function cr_tan() {console.log("tan");
 		var ret1 = crex_findReg('fa0');
 		if (ret1.match === 0) {
 			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
 		} 
-		value1 = readRegister(ret1.indexComp, ret1.indexElem);
+		value1 = readRegister(ret1.indexComp, ret1.indexElem,"SFP-Reg");
 		const tan = Math.tan(value1);
-		writeRegister(tan, ret1.indexComp, ret1.indexElem);
+		writeRegister(tan, ret1.indexComp, ret1.indexElem,"SFP-Reg");
 	},
 	// Interruption functions
     0x64:   function cr_attachInterrupt() {console.log("attachInterrupt");},
@@ -654,16 +638,6 @@ const hookMap = {
 		while ((performance.now() - start) < (ms)) {
 			// wait
 		}
-			// run_program = 4; // Estado especial de delay
-			// function checkDelay() {
-			// 	if (Date.now() - start >= ms) {
-			// 		console.log("Delay finalizado: " + (Date.now() - start) + "ms");
-			// 		execution_index++; // Avanza a la siguiente instrucción
-			// 		run_program = 1; // Reanuda ejecución normal
-			// 	} else {
-			// 		setTimeout(checkDelay, 10); // Vuelve a comprobar en 10ms
-			// 	}
-			// }
 	},
     0xc0:  function cr_delayMicroseconds() {console.log("delayMicroseconds");
 		var ret1 = crex_findReg('a0');
@@ -780,71 +754,13 @@ const hookMap = {
 	0xdc:  function cr_serial_find() {
 		console.log("serial_find");
 		if (serial_begin != 0 && initArduino != 0) {
-			var ret1 = crex_findReg('a0');
-			if (ret1.match == 0) {
-				throw packExecute(true, "capi_syscall: register " + value1 + " not found", 'danger', null);
-			}
-
-			var addr = readRegister(ret1.indexComp, ret1.indexElem);
-			var search = readMemory(parseInt(addr), "string");
-			var buffer = app._data.keyboard;
-
-			// Si el buffer está vacío, espera entrada y retorna
-			if (!buffer || buffer.length === 0) {
-				run_program = 3;
-				return keyboard_read(kbd_read_string, ret1);
-			}
-
-			if (buffer.indexOf(search) !== -1) {
-				console.log("serial_find: " + search + " found in " + buffer);
-				writeRegister(1, ret1.indexComp, ret1.indexElem);
-			} else {
-				console.log("serial_find: " + search + " not found in " + buffer);
-				writeRegister(0, ret1.indexComp, ret1.indexElem);
-			}
-			app._data.keyboard = "";
-			app._data.display = "";
-			keyboard = "";
+			keyboard_read_find(kbd_read_string, 'a0');
 		}
 	},
     0xe0:  function cr_serial_findUntil() {
 		console.log("serial_findUntil");
 		if (serial_begin != 0 && initArduino != 0) {
-			//console.log(app._data.keyboard);
-			// Search character is in register a0
-				var ret1 = crex_findReg('a0') ;
-				if (ret1.match == 0) {
-					throw packExecute(true, "capi_syscall: register " + value1 + " not found", 'danger', null);
-				}
-
-				var addr = readRegister(ret1.indexComp, ret1.indexElem);
-				var search  = readMemory(parseInt(addr), "string") ;
-				// Ex character is in register a1
-				var ret2 = crex_findReg('a1') ;
-				if (ret2.match == 0) {
-					throw packExecute(true, "capi_syscall: register " + value1 + " not found", 'danger', null);
-				}
-
-				var addr2 = readRegister(ret2.indexComp, ret2.indexElem);
-				var ex  = readMemory(parseInt(addr2), "string") ;
-
-				var buffer = app._data.keyboard;
-				var idxSearch = buffer.indexOf(search);
-				var idxEx = buffer.indexOf(ex);
-				if (idxSearch !== -1 && (idxEx === -1 || idxEx > idxSearch))  {
-				// La subcadena está presente
-					writeRegister(1, ret1.indexComp, ret1.indexElem); // Return 1 if found
-				}
-				else {
-					writeRegister(0, ret1.indexComp, ret1.indexElem); // Return 0 if not found
-				}
-				// serial.find is destructive, so we clean the buffer
-				app._data.keyboard = "";
-				app._data.display = "";
-				keyboard = "";
-
-			
-
+			keyboard_read_find_until(kbd_read_string, 'a0', 'a1', 'a2');
 		}
 	},
     0xe4:  function cr_serial_flush() {
@@ -936,74 +852,13 @@ const hookMap = {
     0xf8:  function cr_serial_readBytesUntil() { //REVISAR
 		console.log("serial_readBytesUntil");
 		if (serial_begin != 0 && initArduino != 0) {
-			// Break character is in register a0
-			var ret_a0 = crex_findReg('a0');
-			if (ret_a0.match === 0) {
-				throw packExecute(true, "capi_syscall: register a0 not found", 'danger', null);
-			}
-			var endChar = readRegister(ret_a0.indexComp, ret_a0.indexElem);
-			console.log("serial_readBytesUntil: endChar = " + String.fromCharCode(endChar) + ", charCode = " + endChar);
-			var buffer = "";
-			// Len in a2
-			var ret_a2 = crex_findReg('a2');
-			if (ret_a2.match === 0) {
-				throw packExecute(true, "capi_syscall: register a2 not found", 'danger', null);
-			}
-			var len = readRegister(ret_a2.indexComp, ret_a2.indexElem);
-			var done = 0;
-			while (done < len) {
-				capi_read_char('a0');
-				var ret1 = crex_findReg('a0');
-				if (ret1.match === 0) {
-					throw packExecute(true, "capi_syscall: register a0 not found", 'danger', null);
-				}
-				var charCode = readRegister(ret1.indexComp, ret1.indexElem);
-				var char = String.fromCharCode(charCode);
-				console.log("serial_readBytesUntil: char = " + char + ", charCode = " + charCode);
-				if (charCode === endChar) {
-					break;
-				}
-				buffer += char;
-				done ++;
-			}
-			var ret_a1 = crex_findReg('a1');
-			if (ret_a1.match !== 0) {
-				var addr = readRegister(ret_a1.indexComp, ret_a1.indexElem);
-				writeMemory(buffer, parseInt(addr), "string");
-			}
+			capi_read_string_until('a0', 'a1', 'a2');
 		}
-
 	},
-    0xfc:  function cr_serial_readString() {
-		console.log("serial_readString");
-		if (serial_begin != 0 && initArduino != 0) {
-			capi_cr_readString('a0')
-		}
-		}, // Revisar
-    0x100:  function cr_serial_readStringUntil() {console.log("serial_readStringUntil");},
-	0x104:  function cr_serial_write() {
+	0xfc:  function cr_serial_write() {
 		console.log("serial_write");
 		if (serial_begin != 0 && initArduino != 0) {
 			var ret1 = crex_findReg('a0'); 
-			// var ret2 = crex_findReg('a1'); 
-			// if (ret1.match === 0) {
-			// 	throw packExecute(true, "capi_syscall: register a0 not found", 'danger', null);
-			// }
-			// var value = readRegister(ret1.indexComp, ret1.indexElem);
-			// // Case: serial.write(buf,len). Len must be a value not a memory address
-			// if (ret2.match !== 0) {
-			// 	var len = readRegister(ret2.indexComp, ret2.indexElem);
-			// 	console.log("serial_write: " + value + ", len: " + len);
-			// 	if (len > 0 || len < 100) { //if its a number and can fit
-			// 		var output = "";
-			// 		for (var i = 0; i < len; i++) {
-			// 			var byte = readMemory(parseInt(value) + i, "byte");
-			// 			output += String.fromCharCode(byte);
-			// 			console.log("serial_write: byte " + i + " = " + byte);
-			// 		}
-			// 		display_print(output);
-			// 		writeRegister(len, ret1.indexComp, ret1.indexElem);
-			// }
 				if (ret1.match === 0) {
 					throw packExecute(true, "capi_syscall: register a0 not found", 'danger', null);
 				}
@@ -1022,12 +877,89 @@ const hookMap = {
 			} 
 			
 		},
-	0x108:  function cr_serial_printf() 
+	0x100:  function cr_serial_printf() 
 	{
 		console.log("serial_printf ") ; 
 		if (serial_begin != 0 && initArduino != 0) {
 			capi_printf('a0');
 		}
+	},
+	// Floating point functions
+	0x104:   function cr_fabs() {
+		console.log("fabs");
+		var ret1 = crex_findReg('fa0');
+		if (ret1.match === 0) {
+			throw packExecute(true, "capi_syscall: register a0 not found", 'danger', null);
+		}
+		var value = readRegister(ret1.indexComp, ret1.indexElem, "SFP-Reg");
+		console.log("abs: value = " + value);
+		// Calculate the absolute value
+		value = value > 0 ? value : -value;
+		writeRegister(value, ret1.indexComp, ret1.indexElem, "SFP-Reg");
+
+		},
+	0x108:   function cr_fmax() {
+		console.log("fmax");
+		// Value 1
+		var ret1 = crex_findReg('fa0');
+		if (ret1.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);
+		}
+		value1 = readRegister(ret1.indexComp, ret1.indexElem);
+		console.log("cr_fmax: value1 is a float = " + value1);
+
+		// Value 2
+		var ret2 = crex_findReg('fa1');
+		if (ret2.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa1 not found", 'danger', null);
+		}
+		value2 = readRegister(ret2.indexComp, ret2.indexElem);
+		console.log("cr_fmax: value2 is a float = " + value2);
+
+		// Find the maximum value
+		const max = (value1 > value2) ? value1 : value2;
+		writeRegister(max, ret1.indexComp, ret1.indexElem);
+	},	
+    0x10c:   function cr_fmin() {
+		console.log("fmin");
+		// Value 1
+		var ret1 = crex_findReg('fa0');
+		if (ret1.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
+		} 
+		value1 = readRegister(ret1.indexComp, ret1.indexElem);
+		// Value 2
+		var ret2 = crex_findReg('fa1');
+		if (ret2.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa1 not found", 'danger', null);	
+		} 
+		value2 = readRegister(ret2.indexComp, ret2.indexElem);
+
+		// Find the maximum value
+		const min = (value1 < value2) ? value1 : value2;
+		writeRegister(min, ret1.indexComp, ret1.indexElem);
+	},
+	0x110:   function cr_sqrtf() {
+		console.log("sqrtf");
+		var ret1 = crex_findReg('fa0');
+		if (ret1.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
+		} 
+		value1 = readRegister(ret1.indexComp, ret1.indexElem, "SFP-Reg");
+		const sqrt = Math.sqrt(value1);
+		console.log("sqrtf: value1 = " + value1 + ", sqrt = " + sqrt);
+		writeRegister(sqrt, ret1.indexComp, ret1.indexElem, "SFP-Reg");
+	},
+    0x114:   function cr_sqf() {
+		console.log("sqf");
+		var ret1 = crex_findReg('fa0');
+		if (ret1.match === 0) {
+			throw packExecute(true, "capi_syscall: register fa0 not found", 'danger', null);	
+		} 
+		value1 = readRegister(ret1.indexComp, ret1.indexElem, "SFP-Reg");
+		const sq = value1*value1;
+		console.log("sqf: value1 = " + value1 + ", sq = " + sq);
+		writeRegister(sq, ret1.indexComp, ret1.indexElem, "SFP-Reg");
 	},
 };
 
@@ -1161,29 +1093,6 @@ function capi_cr_readString ( value1 )
     run_program = 3;
     return keyboard_read(kbd_read_string, ret1) ;
 }
-
-
-function capi_loaded(){
-    /* Google Analytics */
-    creator_ga('execute', 'execute.arduino', 'execute.arduino.loaded');
-    if (typeof load_binary !== "undefined" && load_binary && update_binary.instructions_tag) {
-        let tags = update_binary.instructions_tag;
-        if (tags.length > 0) {
-            let last = tags[tags.length - 1];
-            let last_addr = last.addr;
-            console.log("Última dirección registrada en la librería:", last_addr);
-            return last_addr; // Puedes devolverla como número o string
-        } else {
-            console.log("La librería está cargada pero no tiene instrucciones.");
-            return 0;
-        }
-    } else {
-        console.log("No hay librería cargada");
-        return 0;
-    }
-}
-
-
 
 /*
  *  CREATOR instruction description API:
@@ -1544,6 +1453,52 @@ function capi_read_string ( value1, value2 )
 
 	run_program = 3;
 	return keyboard_read(kbd_read_string, ret1) ;
+}
+
+function capi_read_string_until(value1, value2, value3) { //REVISE
+    /* Google Analytics */
+    creator_ga('execute', 'execute.syscall', 'execute.syscall.read_string');
+	console.log("capi_read_string_until: " + value1 + ", " + value2 + ", " + value3);
+    // Value 1 is the searched char
+    var ret1 = crex_findReg(value1);
+    if (ret1.match === 0) {
+        throw packExecute(true, "capi_syscall: register " + value1 + " not found", 'danger', null);
+    }
+	// Check if value1 is a number and is a valid ASCII character
+	var value1_check = readRegister(ret1.indexComp, ret1.indexElem);
+	if (typeof value1_check !== "number" || value1_check < 0 || value1_check > 255) {
+		throw packExecute(true, "capi_syscall: invalid value for searched character", 'danger', null);
+	}
+
+    // Value 2 is the buffer
+    var ret2 = crex_findReg(value2);
+    if (ret2.match === 0) {
+        throw packExecute(true, "capi_syscall: register " + value2 + " not found", 'danger', null);
+    }
+
+    // Value 3 is the length or end character
+	var ret3 = crex_findReg(value3);
+    if (ret3.match === 0) {
+        throw packExecute(true, "capi_syscall: register " + value3 + " not found", 'danger', null);
+    }
+	// Check if value3 is a number and greater than 0
+	var value3_check = readRegister(ret3.indexComp, ret3.indexElem);
+	 if (typeof value3_check !== "number" || value3_check <= 0) {
+        throw packExecute(true, "capi_syscall: invalid value for length/end char", 'danger', null);
+    }
+   
+
+    if (typeof document != "undefined") {
+        document.getElementById('enter_keyboard').scrollIntoView();
+    }
+
+    // ret1.indexComp2 = ret2.indexComp;
+    // ret1.indexElem2 = ret2.indexElem;
+	ret2.indexComp2 = ret3.indexComp;
+    ret2.indexElem2 = ret3.indexElem;
+
+    run_program = 3;
+    return keyboard_read_until(kbd_read_string, ret2, value1);
 }
 
 function capi_sbrk ( value1, value2 )

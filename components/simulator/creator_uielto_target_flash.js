@@ -73,6 +73,7 @@
                                           { text: 'ESP32-C2 (RISC-V)',       value: 'esp32c2' },
                                           { text: 'ESP32-C3 (RISC-V)',       value: 'esp32c3' },
                                           { text: 'ESP32-H2 (RISC-V)',       value: 'esp32h2' },
+                                          { text: 'ESP32-C6 (RISC-V)',       value: 'esp32c6' },
                                         //{ text: 'ESP32-S2 (MIPS-32)',      value: 'esp32s2' },
                                         //{ text: 'ESP32-S3 (MIPS-32)',      value: 'esp32s3' },
                                         ],

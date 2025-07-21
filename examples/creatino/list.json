@@ -21,18 +21,12 @@
       "name": "Example 4",
       "id": "e4",
       "url":"examples/creatino/example4.s",
-      "description": "Traffic lights example"
+      "description": "Hello World with Serial Printf"
     },
     {
       "name": "Example 5",
       "id": "e5",
       "url":"examples/creatino/example5.s",
-      "description": "Hello World with Serial Printf"
-    },
-    {
-      "name": "Example 6",
-      "id": "e6",
-      "url":"examples/creatino/example6.s",
       "description": "I/O with Serial Read"
     }
   ]

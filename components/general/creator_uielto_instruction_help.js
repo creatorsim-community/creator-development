@@ -1,4 +1,3 @@
-
 /*
  *  Copyright 2018-2025 Felix Garcia Carballeira, Diego Camarmas Alonso, Alejandro Calderon Mateos
  *
@@ -102,114 +101,132 @@
                     //Help table
                     insHelpFields: ['name'],
 
-                    "arduinoJson": [
-                      { "name": "cr_initArduino", "help": "Starts Arduino functions"},
-                      { "name": "cr_digitalRead", "help": "Reads the value from a specified digital pin" },
-                      { "name": "cr_pinMode", "help": "Configures the specified pin to behave as an input or an output" },
-                      { "name": "cr_digitalWrite", "help": "Writes a HIGH or LOW value to a digital pin" },
-                      { "name": "cr_analogRead", "help": "Reads the value from the specified analog pin" },
-                      { "name": "cr_analogReadResolution", "help": "Sets the resolution of analogRead" },
-                      { "name": "cr_analogWrite", "help": "Writes an analog value (PWM wave) to a pin" },
-                      { "name": "cr_map", "help": "Re-maps a number from one range to another" },
-                      { "name": "cr_constrain", "help": "Constrains a number to be within a range" },
-                      { "name": "cr_abs", "help": "Computes the absolute value of a number" },
-                      { "name": "cr_max", "help": "Finds the maximum of two values" },
-                      { "name": "cr_min", "help": "Finds the minimum of two values" },
-                      { "name": "cr_pow", "help": "Computes the value of a number raised to a power" },
-                      { "name": "cr_bit", "help": "Returns the value of a bit at a specific position" },
-                      { "name": "cr_bitClear", "help": "Clears (sets to 0) a bit at a specified position" },
-                      { "name": "cr_bitRead", "help": "Reads a bit at a specified position" },
-                      { "name": "cr_bitSet", "help": "Sets a bit to 1 at a specified position" },
-                      { "name": "cr_bitWrite", "help": "Writes a bit to a specified position" },
-                      { "name": "cr_highByte", "help": "Returns the high byte of a word" },
-                      { "name": "cr_lowByte", "help": "Returns the low byte of a word" },
-                      { "name": "cr_sqrt", "help": "Computes the square root of a number" },
-                      { "name": "cr_sq", "help": "Squares a number" },
-                      { "name": "cr_cos", "help": "Computes the cosine of an angle" },
-                      { "name": "cr_sin", "help": "Computes the sine of an angle" },
-                      { "name": "cr_tan", "help": "Computes the tangent of an angle" },
-                      { "name": "cr_attachInterrupt", "help": "Attaches an interrupt to a pin" },
-                      { "name": "cr_detachInterrupt", "help": "Detaches an interrupt from a pin" },
-                      { "name": "cr_digitalPinToInterrupt", "help": "Maps a digital pin to the corresponding interrupt number" },
-                      { "name": "cr_pulseIn", "help": "Reads a pulse (either HIGH or LOW) on a pin" },
-                      { "name": "cr_pulseInLong", "help": "Reads a pulse (either HIGH or LOW) on a pin, with a longer timeout" },
-                      { "name": "cr_shiftIn", "help": "Shifts in a byte of data one bit at a time" },
-                      { "name": "cr_shiftOut", "help": "Shifts out a byte of data one bit at a time" },
-                      { "name": "cr_interrupts", "help": "Enables interrupts" },
-                      { "name": "cr_nointerrupts", "help": "Disables interrupts" },
-                      { "name": "cr_isDigit", "help": "Checks if a character is a digit" },
-                      { "name": "cr_isAlpha", "help": "Checks if a character is alphabetic" },
-                      { "name": "cr_isAlphaNumeric", "help": "Checks if a character is alphanumeric" },
-                      { "name": "cr_isAscii", "help": "Checks if a character is ASCII" },
-                      { "name": "cr_isControl", "help": "Checks if a character is a control character" },
-                      { "name": "cr_isPunct", "help": "Checks if a character is punctuation" },
-                      { "name": "cr_isHexadecimalDigit", "help": "Checks if a character is a hexadecimal digit" },
-                      { "name": "cr_isUpperCase", "help": "Checks if a character is uppercase" },
-                      { "name": "cr_isLowerCase", "help": "Checks if a character is lowercase" },
-                      { "name": "cr_isPrintable", "help": "Checks if a character is printable" },
-                      { "name": "cr_isGraph", "help": "Checks if a character has a graphical representation" },
-                      { "name": "cr_isSpace", "help": "Checks if a character is a space" },
-                      { "name": "cr_isWhitespace", "help": "Checks if a character is whitespace" },
-                      { "name": "cr_delay", "help": "Pauses the program for the specified amount of time (in milliseconds)" },
-                      { "name": "cr_delayMicroseconds", "help": "Pauses the program for the specified amount of time (in microseconds)" },
-                      { "name": "cr_randomSeed", "help": "Initializes the random number generator" },
-                      { "name": "cr_random", "help": "Generates a random number" },
-                      { "name": "cr_serial_available", "help": "Gets the number of bytes available for reading from the serial buffer" },
-                      { "name": "cr_serial_availableForWrite", "help": "Gets the number of bytes available for writing in the serial buffer" },
-                      { "name": "cr_serial_begin", "help": "Sets the data rate in bits per second (baud) for serial data transmission" },
-                      { "name": "cr_serial_end", "help": "Disables serial communication" },
-                      { "name": "cr_serial_find", "help": "Reads data from the serial buffer until a target string is found" },
-                      { "name": "cr_serial_findUntil", "help": "Reads data from the serial buffer until a target string is found or a timeout occurs" },
-                      { "name": "cr_serial_flush", "help": "Waits for the transmission of outgoing serial data to complete" },
-                      { "name": "cr_serial_parseFloat", "help": "Reads the next valid float from the serial buffer" },
-                      { "name": "cr_serial_parseInt", "help": "Reads the next valid integer from the serial buffer" },
-                      { "name": "cr_serial_read", "help": "Reads incoming serial data" },
-                      { "name": "cr_serial_readBytes", "help": "Reads characters from the serial buffer into an array" },
-                      { "name": "cr_serial_readBytesUntil", "help": "Reads characters from the serial buffer into an array until a terminator character is found" },
-                      { "name": "cr_serial_readString", "help": "Reads characters from the serial buffer into a String" },
-                      { "name": "cr_serial_readStringUntil", "help": "Reads characters from the serial buffer into a String until a terminator character is found" },
-                      { "name": "cr_serial_write", "help": "Writes binary data to the serial port" }
-                    ]
-                  }
-                },
+                    arduinoJson: [
+                      { group: "Digital I/O", items: [
+                          { "name": "digitalRead (int pin)", "help": "Reads the value from a specified digital pin", "inputType": "int", "returnType": "int" },
+                          { "name": "digitalWrite (int pin, int value)", "help": "Writes a value to a specified digital pin", "inputType": "int, int", "returnType": "void" },
+                          { "name": "pinMode (int pin, int mode)", "help": "Configures a specified pin to behave either as an input or an output",
+                            "inputType": "int, int", "returnType": "void" }, 
+                      ]},
+                      { group: "Analog I/O", items: [
+                          { "name": "analogRead (int pin)", "help": "Reads the value  from a specified analog pin", "inputType": "int", "returnType": "int" }, 
+                          {"name":"analogReadResolution (int bits)", "help": "Sets the resolution of the analog input", "inputType": "int", "returnType": "void" },   
+                          { "name": "analogWrite (int pin, int value)", "help": "Writes an analog value to a specified pin", "inputType": "int, int", "returnType": "void" },
+                      ]},
+                      {group: "Trigonometry", items: [
+                          { "name": "sin (float x)", "help": "Computes the sine of an angle (in radians)", "inputType": "float", "returnType": "float " },
+                          { "name": "cos (float x)", "help": "Computes the cosine of an angle (in radians)", "inputType": "float", "returnType": "float " },
+                          { "name": "tan (float x)", "help": "Computes the tangent of an angle (in radians)", "inputType": "float", "returnType": "float " },
+                      ]},
+                      { group:"Bit and Bytes", items: [
+                          { "name": "bitRead (int value, int bit)", "help": "Reads a specific bit from a value", "inputType": "int, int", "returnType": "int" },
+                          { "name": "bitWrite (int value, int bit, int bitValue)", "help": "Writes a specific bit to a value", "inputType": "int, int, int", "returnType": "void" },
+                          { "name": "bitSet (int value, int bit)", "help": "Sets a specific bit in a value", "inputType": "int, int", "returnType": "void" },
+                          { "name": "bitClear (int value, int bit)", "help": "Clears a specific bit in a value", "inputType": "int, int", "returnType": "void" },
+                          { "name": "bit (int n)",  "help":  "Returns the value of a specific bit position",  "inputType":"int",  "returnType":"int" },
+                          {"name":"highByte (int value)", "help": "Returns the high byte of a value", "inputType": "int", "returnType": "int" },
+                          {"name":"lowByte (int value)", "help": "Returns the low byte of a value", "inputType": "int", "returnType": "int" },
+                          
+                        ]
+                      },
+                      { group: "Character and String", items: [
+                        {"name": "isAlpha (char c)", "help": "Checks if a character is an alphabetic letter", "inputType": "char", "returnType": "bool" },
+                        {"name": "isDigit (char c)", "help": "Checks if a character is a digit", "inputType": "char", "returnType": "bool" },
+                        {"name": "isAlphaNumeric (char c)", "help": "Checks if a character is alphanumeric", "inputType": "char", "returnType": "bool" },
+                        {"name" : "isHexadecimalDigit (char c)", "help": "Checks if a character is a hexadecimal digit", "inputType": "char", "returnType": "bool" },
+                        {"name": "isAscii (char c)", "help": "Checks if a character is an ASCII character", "inputType": "char", "returnType": "bool" },
+                        {"name": "isSpace (char c)", "help": "Checks if a character is a whitespace", "inputType": "char", "returnType": "bool" },
+                        {"name": "isPunct (char c)", "help": "Checks if a character is a punctuation character", "inputType": "char", "returnType": "bool" },
+                        {"name": "isGraph (char c)", "help": "Checks if a character is a graphical character", "inputType": "char", "returnType": "bool" },
+                        {"name": "isControl (char c)", "help": "Checks if a character is a control character", "inputType": "char", "returnType": "bool" },
+                        {"name": "isLowerCase (char c)", "help": "Checks if a character is a lowercase letter", "inputType": "char", "returnType": "bool"},
+                        {"name": "isUpperCase (char c)", "help": "Checks if a character is an uppercase letter", "inputType": "char", "returnType": "bool" },
+                        {"name": "isPrintable (char c)", "help": "Checks if a character is printable", "inputType": "char", "returnType": "bool" },
+                        {"name": "toLowerCase (char c)", "help": "Converts a character to lowercase", "inputType": "char", "returnType": "char" },
+                        {"name": "toUpperCase (char c)", "help": "Converts a character to uppercase", "inputType": "char", "returnType": "char" },
+        
+                      ]},
 
+                      { group: "Mathematics", items: [
+                          { "name": "abs (int x)",    "help": "Computes the absolute value of a number", "inputType": "int",   "returnType": "int" },
+                          { "name": "max (int x, int y)",    "help": "Finds the maximum of two values",         "inputType": "int",   "returnType": "int" },
+                          { "name": "min (int x, int y)",    "help": "Finds the minimum of two values",         "inputType": "int",   "returnType": "int" },
+                          { "name": "pow (int base, int exp)",    "help": "Computes the value of a number raised to a power", "inputType": "int, int", "returnType": "int" },
+                          { "name": "sqrt (int x)",   "help": "Computes the square root of a number",    "inputType": "int",   "returnType": "int" },
+                          { "name": "sq (int x)",     "help": "Squares a number",                        "inputType": "int",   "returnType": "int" },
+                          { "name": "fabs (float x)",   "help": "Computes the absolute value of a float",  "inputType": "float", "returnType": "float" },
+                          { "name": "fmax (float x, float y)",   "help": "Finds the maximum of two floats",         "inputType": "float, float", "returnType": "float" },
+                          { "name": "fmin (float x, float y)",   "help": "Finds the minimum of two floats",         "inputType": "float, float", "returnType": "float" },
+                          { "name": "sqrtf (float x)",  "help": "Computes the square root of a float",     "inputType": "float", "returnType": "float" },
+                          { "name": "sqf (float x)",    "help": "Squares a float",                         "inputType": "float", "returnType": "float" }
+                        ]
+                      },
+                      { group: "Serial", items: [
+                          { "name": "serial_available ()", "help": "Gets the number of bytes available for reading from the serial buffer", "inputType": "", "returnType": "" },
+                          { "name": "serial_write (char *data)", "help": "Writes binary data to the serial port", "inputType": "char *", "returnType": "" },
+                          { "name": "serial_read (char *buffer, int size)", "help": "Reads binary data from the serial port", "inputType": "char *, int", "returnType": "" },
+                          { "name": "serial_printf (char *data)", "help": "Prints data to the serial port", "inputType": "char *", "returnType": "" },
+                          { "name": "serial_begin (int baudrate)", "help": "Initializes the serial port with a specified baud rate", "inputType": "int", "returnType": "" },
+                          { "name": "serial_end ()", "help": "Ends the serial communication", "inputType": "", "returnType": "" },
+                          { "name": "serial_flush ()", "help": "Waits for the transmission of outgoing serial data to complete", "inputType": "", "returnType": "" },
+                          { "name": "serial_readBytes (char *buffer, int length)", "help": "Reads a specified number of bytes from the serial port", "inputType": "char *, int", "returnType": "" },  
+                          { "name": "serial_readStringUntil (char terminator)", "help": "Reads characters from the serial buffer until a specified terminator character is found", "inputType": "char", "returnType": "" },
+                          { "name":"serial_find (char *target, int length)", "help": "Searches for a specific sequence of characters in the serial buffer", "inputType": "char *, int", "returnType": "" },
+                          { "name": "serial_findUntil (char *target, int length, char terminator)", "help": "Searches for a specific sequence of characters in the serial buffer until a specified terminator character is found", "inputType": "char *, int, char", "returnType": "" },
+                          { "name": "serial_parseInt ()", "help": "Parses an integer from the serial buffer", "inputType": "", "returnType": "int" },
+                          { "name": "serial_parseFloat ()", "help": "Parses a float from the serial buffer", "inputType": "", "returnType": "float" },
+                          { "name": "serial_availableForWrite ()", "help": "Checks if there is space available for writing in the serial buffer", "inputType": "", "returnType": "int" }, 
+                          { "name": "serial_available()", "help": "Checks if there are bytes available to read from the serial buffer", "inputType": "", "returnType": "int" },
+
+                          
+                        ]
+                      },
+                      { group: "Time", items: [
+                          { "name": "delay", "help": "Pauses the program for the specified amount of time (in milliseconds)", "inputType": "unsigned long", "returnType": "" },
+                          { "name": "delayMicroseconds", "help": "Pauses the program for the specified amount of time (in microseconds)" }
+                        ]
+                      },
+                      { group: "Random", items: [
+                          { "name": "random (int min, int max)", "help": "Generates a random number", "inputType": "int", "returnType": "int" },
+                          { "name": "randomSeed (int seed)", "help": "Seeds the random number generator", "inputType": "unsigned long", "returnType": "" }
+                      ]}
+                    ]
+                  }},
     methods:   {
                   get_width(){
                     return this._props.instruction_help_size + "vw"
                   }
                 },
 
-    template:   '<b-sidebar :id="id" sidebar-class="border-left border-info px-3 py-2" right shadow' + 
-                '           title="Arduino functions Help"' +
-                '           :width="get_width()">' +
-                ' ' +
-                ' <b-form-input id="filter-input"' +
-                '               v-model="instHelpFilter"' +
-                '               type="search"' +
-                '               placeholder="Search instruction"' +
-                '               size=sm' +
-                ' ></b-form-input>' +
-                ' ' +
-                ' <br>' +
-                '<a target="_blank" href="https://docs.arduino.cc/language-reference/#functions"><span class="fas fa-globe"></span> Arduino Guide</a>'+
-                ' <br>' +
-                ' ' +
-                ' <b-table small :items="arduinoJson" ' +
-                '                :fields="insHelpFields" ' +
-                '                class="text-left help-scroll-y my-3"' +
-                '                :filter="instHelpFilter"' +
-                '                thead-class="d-none">' +
-                ' ' +
-                '   <template v-slot:cell(name)="row">' +
-                '     <h4>{{row.item.name}}</h4>' +
-                '     <em>{{row.item.signatureRaw}}</em>' +
-                '     <br>' +
-                '     {{row.item.help}}' +
-                '   </template>' +
-                ' ' +
-                ' </b-table>' +
-                ' ' +
-                '</b-sidebar'
+    template:   '<b-sidebar :id="id" sidebar-class="border-left border-info px-3 py-2" right shadow' +
+            '           title="Arduino functions Help"' +
+            '           :width="get_width()">' +
+            ' <b-form-input id="filter-input"' +
+            '               v-model="instHelpFilter"' +
+            '               type="search"' +
+            '               placeholder="Search instruction"' +
+            '               size=sm' +
+            ' ></b-form-input>' +
+            ' <br>' +
+            '<a target="_blank" href="https://docs.arduino.cc/language-reference/#functions"><span class="fas fa-globe"></span> Arduino Guide</a>'+
+            ' <br>' +
+            ' <div v-for="section in arduinoJson" :key="section.group">' +
+            '   <h4 class="mt-3"><strong>{{ section.group }}</strong></h4>' +
+            '   <b-table small :items="section.items" ' +
+            '            :fields="insHelpFields" ' +
+            '            class="text-left help-scroll-y my-3"' +
+            '            :filter="instHelpFilter"' +
+            '            thead-class="d-none">' +
+            '     <template v-slot:cell(name)="row">' +
+            '       <h4>{{row.item.name}}</h4>' +
+            '       <em>{{row.item.signatureRaw}}</em><br>' +
+            '       {{row.item.help}}<br>' +
+            '       <b>Input:</b> {{row.item.inputType}}<br>' +
+            '       <b>Returns:</b> {{row.item.returnType}}' +
+            '     </template>' +
+            '   </b-table>' +
+            ' </div>' +
+            '</b-sidebar'
   }
 var uielto_board_help = {
   props: {

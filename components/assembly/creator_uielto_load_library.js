@@ -78,7 +78,10 @@
                       library_load_creatino() {
                         var reader;
                         var baseUrl = window.location.origin; 
-                        var filePath = baseUrl + '/creator-development/test/riscv/correct/libraries/creatino.o';
+                        var pathParts = window.location.pathname.split('/');
+                        var projectName = pathParts.filter(Boolean)[0]; // Primer segmento del path
+                        var filePath = baseUrl + '/' + projectName + '/test/riscv/correct/libraries/creatino.o';
+                        //var filePath = baseUrl + '/creator-development/test/riscv/correct/libraries/creatino.o';
                         console.log('Cargando archivo desde:', filePath);
                         
                         fetch(filePath, {
