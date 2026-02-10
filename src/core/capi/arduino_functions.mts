@@ -9,7 +9,6 @@ import { REGISTERS, main_memory, status } from "../core.mjs";
 import { display_print, keyboard_read_find, kbd_read_string, keyboard_parseInt, keyboard_read, kbd_read_char, keyboard_read_until } from "../executor/IO.mjs";
 import hookMap from "../../web/components/simulator/CreatinoMaker/components/BoardElements/esp32c3devkit2.js";
 import { pinStates } from "./pinstates.mjs";
-//import {connections,compState,svgRef,positions} from '../../web/components/simulator/CreatinoMaker/App.vue'
 import {
     connections,
     positions,

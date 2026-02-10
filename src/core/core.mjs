@@ -53,6 +53,7 @@ export let loadedLibrary = {};
 export let backup_stack_address;
 export let backup_data_address;
 export let loadedCreatino = false;
+export let loadedESP32C3Interr = false;
 
 /** @type {import("./core.d.ts").Architecture} */
 export let architecture = {};
@@ -232,17 +233,142 @@ export function loadArchitecture(architectureYaml, isa = []) {
 }
 
 /**
+ * Load global variables from a library into memory
+ * @param {Object} libraryData - Array of data items from library
+ * @throws {Error} If data cannot be loaded into memory
+ */
+function loadLibraryGlobalVariables(libraryData) {
+    if (!libraryData || !Array.isArray(libraryData)) {
+        return;
+    }
+
+    for (const dataItem of libraryData) {
+        const addr = BigInt(dataItem.address);
+        const type = dataItem.type;
+        const value = dataItem.value;
+        const size = dataItem.size;
+        const label = dataItem.labels?.[0] || "";
+
+        try {
+            switch (type) {
+                case "byte":
+                    main_memory.write(addr, Number("0x" + value));
+                    main_memory.addHint(addr, label, "byte", 8);
+                    break;
+
+                case "word":
+                    {
+                        const wordValue = BigInt("0x" + value);
+                        const wordSizeBytes = WORDSIZE / BYTESIZE;
+                        const wordBytes = new Uint8Array(wordSizeBytes);
+
+                        for (let i = 0; i < wordSizeBytes; i++) {
+                            const shiftAmount = BigInt(
+                                (wordSizeBytes - 1 - i) * BYTESIZE,
+                            );
+                            wordBytes[i] = Number(
+                                (wordValue >> shiftAmount) &
+                                    BigInt((1 << BYTESIZE) - 1),
+                            );
+                        }
+
+                        main_memory.writeWord(addr, wordBytes);
+                        main_memory.addHint(addr, label, "word", WORDSIZE);
+                    }
+                    break;
+
+                case "float":
+                    {
+                        const floatValue = parseFloat(value);
+                        const buffer = new ArrayBuffer(4);
+                        const view = new DataView(buffer);
+                        view.setFloat32(0, floatValue, false);
+
+                        const wordSizeBytes = WORDSIZE / BYTESIZE;
+                        const floatBytes = new Uint8Array(4);
+                        for (let i = 0; i < 4; i++) {
+                            floatBytes[i] = view.getUint8(i);
+                        }
+
+                        const wordBytesArray = new Uint8Array(wordSizeBytes);
+                        for (let i = 0; i < floatBytes.length && i < wordSizeBytes; i++) {
+                            wordBytesArray[i] = floatBytes[i];
+                        }
+                        main_memory.writeWord(addr, wordBytesArray);
+                        main_memory.addHint(addr, label, "float32", 32);
+                    }
+                    break;
+
+                case "double":
+                    {
+                        const doubleValue = parseFloat(value);
+                        const buffer = new ArrayBuffer(8);
+                        const view = new DataView(buffer);
+                        view.setFloat64(0, doubleValue, false);
+
+                        const wordSizeBytes = WORDSIZE / BYTESIZE;
+                        const doubleBytes = new Uint8Array(8);
+                        for (let i = 0; i < 8; i++) {
+                            doubleBytes[i] = view.getUint8(i);
+                        }
+
+                        // Write multiple words if needed
+                        for (let i = 0; i < doubleBytes.length; i += wordSizeBytes) {
+                            const chunk = new Uint8Array(wordSizeBytes);
+                            for (let j = 0; j < wordSizeBytes && i + j < doubleBytes.length; j++) {
+                                chunk[j] = doubleBytes[i + j];
+                            }
+                            main_memory.writeWord(addr + BigInt(i), chunk);
+                        }
+                        main_memory.addHint(addr, label, "float64", 64);
+                    }
+                    break;
+
+                case "space":
+                case "padding":
+                    // Just add hint for the reserved space
+                    main_memory.addHint(addr, label, "space", size || 0);
+                    break;
+
+                case "string":
+                    {
+                        // Store string data
+                        const stringValue = value || "";
+                        for (let i = 0; i < stringValue.length; i++) {
+                            main_memory.write(BigInt(addr) + BigInt(i), stringValue.charCodeAt(i));
+                        }
+                        main_memory.addHint(addr, label, "string", stringValue.length * 8);
+                    }
+                    break;
+
+                default:
+                    logger.warn(`Unknown data type in library: ${type}`);
+            }
+        } catch (error) {
+            logger.error(`Failed to load library variable '${label}' at 0x${addr.toString(16)}: ${error.message}`);
+        }
+    }
+}
+
+/**
  * Loads a library.
  *
  * @param {string} lib_str
+ * @param {boolean} loadGlobalVariables - Whether to load global variables into memory (default: true)
  *
  * @throws {SyntaxError} If the library is invalid
  */
-export function load_library(lib_str) {
+export function load_library(lib_str, loadGlobalVariables = false) {
     // Parse YAML library format
     import("js-yaml")
         .then(yaml => {
             loadedLibrary = yaml.load(lib_str);
+            
+            // Load global variables from library if requested and if memory is initialized
+            if (loadGlobalVariables && main_memory && loadedLibrary.data) {
+                loadLibraryGlobalVariables(loadedLibrary.data);
+            }
+            
             coreEvents.emit("library-loaded");
         })
         .catch(error => {
@@ -255,8 +381,15 @@ export function load_library(lib_str) {
 export function remove_library() {
     loadedLibrary = {};
     loadedCreatino = false;
+    loadedESP32C3Interr = false;
     coreEvents.emit("library-removed");
 }
+
+/**
+ * Loads the default CREATino library with global variables
+ * @async
+ * @throws {SyntaxError} If the library format is invalid
+ */
 export async function load_CREATino() {
   //show_loading();
   try {
@@ -267,7 +400,7 @@ export async function load_CREATino() {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const fileContent = await response.text();
-    load_library(fileContent);
+    load_library(fileContent, false); 
 
     //hide_loading();
     loadedCreatino = true;
@@ -275,6 +408,59 @@ export async function load_CREATino() {
   } catch (error) {
     throw new SyntaxError(`Invalid library format: ${error.message}`);
   }
+}
+
+/**
+ * Loads the interrupt ESP32-C3 library with global variables
+ * @async
+ * @throws {SyntaxError} If the library format is invalid
+ */
+export async function load_ESP32C3_interrupts() {
+  //show_loading();
+  try {
+    const baseUrl = import.meta.env.BASE_URL
+    const filePath = `${baseUrl}libraries/esp32c3.yml`
+
+    const response = await fetch(filePath);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const fileContent = await response.text();
+    load_library(fileContent, true); 
+
+    //hide_loading();
+    loadedESP32C3Interr = true;
+    console.log("ESP32-C3 interrupt library loaded with global variables");
+    coreEvents.emit("library-loaded");
+  } catch (error) {
+    throw new SyntaxError(`Invalid library format: ${error.message}`);
+  }
+}
+
+/**
+ * Loads a library from a file path with optional global variables
+ * @async
+ * @param {string} filePath - Path to the library YAML file (relative to BASE_URL)
+ * @param {boolean} loadGlobalVariables - Whether to load global variables into memory (default: true)
+ * @throws {Error} If the file cannot be loaded or library format is invalid
+ * @example
+ * // Load library with variables
+ * await load_library_from_file('libraries/my_lib.yml', true);
+ * 
+ * // Load library without variables
+ * await load_library_from_file('libraries/my_lib.yml', false);
+ */
+export async function load_library_from_file(filePath, loadGlobalVariables = true) {
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const fileContent = await response.text();
+        load_library(fileContent, loadGlobalVariables);
+
+        logger.info(`Library loaded from ${filePath}${loadGlobalVariables ? ' with global variables' : ''}`);
+    } catch (error) {
+        throw new SyntaxError(`Failed to load library from ${filePath}: ${error.message}`);
+    }
 }
 
 // compilation

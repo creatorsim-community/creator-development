@@ -1,0 +1,69 @@
+version: "1.0"
+binary: "67800082678000826780008267800082"  # Cuatro instrucciones RISC-V de retorno (4 bytes c/u)
+
+symbols:
+  gpio_output:
+    addr: 0
+    help:
+      description: "Aux function to set GPIO output value"
+      parameters:
+        a0: "Pin"
+      returns: {}
+  gpio_input:
+    addr: 4
+    help:
+      description: "Aux function to set GPIO as input"
+      parameters:
+        a0: "Pin"
+      returns: {}
+  gpio_read:
+    addr: 8
+    help:
+      description: "Aux function to read GPIO value"
+      parameters:
+        a0: "Pin"
+      returns:
+        a0: "Pin state"
+  printf:
+    addr: 12
+    help:
+      description: "Aux function to print a string"
+      parameters:
+        a0: "String address"
+      returns: {}     
+  INTERRUPT_BASE:
+    addr: 0x600c2000
+    help:
+      description: "ESP32-C3 interrupt controller base address"
+  GPIO_BASE:
+    addr: 0x60004000
+    help:
+      description: "ESP32-C3 GPIO base address"
+  g_irq_data:
+    addr: 0x20000000
+    help:
+      description: "Vector de datos de interrupciones (8 elementos de 32-bit)"
+  SYSTIMER_BASE:
+    addr: 0x60023000
+    help:
+      description: "ESP32-C3 system timer base address"
+
+data:
+  # ESP32-C3 specific memory-mapped registers
+  - address: 0x600c2000
+    type: "word"
+    value: "600C2000"
+    label: "INTERRUPT_BASE"
+    size: 4
+
+  - address: 0x60004000
+    type: "word"
+    value: "60004000"
+    label: "GPIO_BASE"
+    size: 4
+
+  - address: 0x20000000
+    type: "word"
+    value: "00000001"
+    label: "g_irq_data"
+    size: 4

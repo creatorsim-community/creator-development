@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Example 1",
+    "id": "e1",
+    "url": "examples/RISCV-32-esp32c3-interrupt/example1.s",
+    "description": "Hardware interrupt handling"
+  },
+  {
+    "name": "Example 2",
+    "id": "e2",
+    "url": "examples/RISCV-32-esp32c3-interrupt/example2.s",
+    "description": "Systimer interrupt handling"
+  }
+]

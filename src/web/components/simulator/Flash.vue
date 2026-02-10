@@ -25,7 +25,7 @@ import { REMOTELAB } from "@/web/src/remoteLab.js";
 import { console_log, show_notification } from "@/web/utils.mjs";
 import { creator_ga } from "@/core/utils/creator_ga.mjs";
 import { instructions } from "@/core/assembler/assembler.mjs";
-import { loadedCreatino } from "@/core/core.mjs";
+import { loadedCreatino, loadedESP32C3Interr } from "@/core/core.mjs";
 
 export default defineComponent({
   props: {
@@ -152,6 +152,7 @@ export default defineComponent({
       showPopup: false,
       pendingAction: null as string | null,
       arduino_support: false,
+      interrupt_support: false,
     };
   },
 
@@ -296,6 +297,7 @@ export default defineComponent({
         target_location: this.targetLocation,
         assembly: this.assembly_code,
         arduino: loadedCreatino,
+        interrupt: loadedESP32C3Interr,
 
       }).then(data => {
         this.flashing = false;

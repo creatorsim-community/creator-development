@@ -24,7 +24,7 @@ import {
   onMounted,
   onUnmounted,
 } from "vue";
-import yaml from "js-yaml";
+import yaml, { load } from "js-yaml";
 
 import SimulatorControls from "../simulator/SimulatorControls.vue";
 import AssemblyActions from "../assembly/AssemblyActions.vue";
@@ -33,7 +33,7 @@ import ThemeToggle from "./ThemeToggle.vue";
 import type { Instruction } from "@/core/assembler/assembler";
 import type { BDropdown } from "bootstrap-vue-next";
 import { coreEvents, CoreEventTypes } from "../../../core/events.mts";
-import { remove_library, architecture, load_CREATino } from "@/core/core.mjs";
+import { remove_library, architecture, load_CREATino, load_ESP32C3_interrupts } from "@/core/core.mjs";
 
 export default defineComponent({
   props: {
@@ -284,6 +284,9 @@ export default defineComponent({
     loadCREATino() {
       load_CREATino();
     },
+    loadESP32C3Interrupts() {
+      load_ESP32C3_interrupts();
+    },
     checkAnnouncementTruncation() {
       // Use nextTick to ensure DOM is updated
       this.$nextTick(() => {
@@ -505,6 +508,9 @@ export default defineComponent({
         <b-dropdown-item @click="loadCREATino">
           <font-awesome-icon :icon="['fas', 'infinity']" class="me-2" /> Add Arduino
           Library
+        </b-dropdown-item>
+        <b-dropdown-item @click="loadESP32C3Interrupts">
+          <font-awesome-icon :icon="['fas', 'microchip']" class="me-2" /> Add ESP32C3 Interrupts
         </b-dropdown-item>
         <b-dropdown-divider />
         <b-dropdown-item @click="removeLibrary">
