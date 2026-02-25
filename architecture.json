@@ -112,6 +112,10 @@
     "stack": {
       "start": 32768,
       "end": 65535
+    },
+    "protected": {
+      "start": 1610612736,
+      "end": 1627389951
     }
   },
   "instructions": [

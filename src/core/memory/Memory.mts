@@ -17,6 +17,9 @@
  * along with CREATOR.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { can_access_protected_memory } from "../capi/espinterrupts.mts";
+import { esp32vect } from "../capi/pinstates.mts";
+
 /**
  *
  * This class provides a comprehensive memory simulation that supports:
@@ -481,7 +484,38 @@ export class Memory {
      * ```
      */
     write(address: bigint, value: number): void {
-        // check address
+        // Check if the address is within the protected memory range
+        const protectedStart = 0x06000000n; 
+        const protectedEnd = 0x06FFFFFFn;   
+
+        //ESP32-C3 specific check for protected memory access
+        if (address >= protectedStart && address <= protectedEnd) {
+            if (!can_access_protected_memory()) {
+                throw new Error(
+                    `Access to protected memory at address ${address.toString(16)} is denied.`,
+                );
+            }
+            //CASE 1: Writting on g_irq_data -- also write it down in esp32vect
+            if (address >= 0x06000000n && address <= 0x060001F0n) {
+                // Take the index of the vector to write to
+                const index = Number((address - 0x06000000n) / 16n); // Each entry is 16 bytes (3 * 4 bytes + padding)
+                if (index < esp32vect.value.length) {
+                    const entry = esp32vect.value[index];
+                    if (entry) {
+                        // Update the corresponding entry in the vector table
+                        const valueIndex = Number((address - 0x06000000n) % 16n) / 4; // Determine which part of the entry to update
+                        if (valueIndex < 4) {
+                            entry[valueIndex] = BigInt(value);
+                        }
+                    }
+                }
+
+
+
+        }
+    }
+    
+
         if (address < this.baseAddress) {
             throw new Error(
                 `Address ${address} is below base address ${this.baseAddress}`,

@@ -28,6 +28,7 @@ import { ARCH as MIPS } from "./arch/mips.mjs";
 import { REG } from "./registers.mts";
 import { INTERRUPTS } from "./interrupts.mts";
 import { ARDUINO } from "./arduino.mts";
+import { ESPINTERR } from "./espinterrupts.mts";
 
 export interface CAPIType {
     MEM: typeof MEM;
@@ -39,6 +40,7 @@ export interface CAPIType {
     REG: typeof REG;
     INTERRUPTS: typeof INTERRUPTS;
     ARDUINO: typeof ARDUINO;
+    ESPINTERR: typeof ESPINTERR;
 }
 
 declare global {
@@ -73,6 +75,7 @@ export function initCAPI(pluginName?: string) {
         REG,
         INTERRUPTS,
         ARDUINO,
+        ESPINTERR,
     };
 
     globalThis.CAPI = CAPI;

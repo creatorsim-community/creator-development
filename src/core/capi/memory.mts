@@ -17,7 +17,7 @@
  * along with CREATOR.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { main_memory, stackTracker, BYTESIZE } from "../core.mjs";
+import { main_memory, stackTracker, BYTESIZE, protected_memory } from "../core.mjs";
 import { exit } from "../executor/executor.mjs";
 import { raise } from "./validation.mts";
 import { crex_findReg } from "../register/registerLookup.mjs";
@@ -25,11 +25,18 @@ import { sentinel } from "../sentinel/sentinel.mjs";
 import { checkDeviceAddr, devices } from "../executor/devices.mts";
 import type { Memory } from "../memory/Memory.mts";
 import { toHex } from "../utils/utils.mjs";
+import { can_access_protected_memory } from "../capi/espinterrupts.mjs"
 
 /*
  *  CREATOR instruction description API:
  *  Memory access
  */
+const PROTECTED_START = 0x60000000n; 
+const PROTECTED_END   = 0x60FFFFFFn;
+
+function isInProtectedRange(address: bigint): boolean {
+    return address >= PROTECTED_START && address <= PROTECTED_END;
+}
 
 /**
  * Writes a value to memory respecting endianness configuration
@@ -48,11 +55,26 @@ function writeValueToMemory(
     }
 
     // get memory
+    if (isInProtectedRange(address)) {
+        if (!can_access_protected_memory()) {
+            raise(
+                "Segmentation fault. Read access denied for address '0x" +
+                    address.toString(16) +
+                    "'",
+            );
+            exit(true);
+        }
+    }
     const deviceID = checkDeviceAddr(Number(address));
     const memory =
-        deviceID === null
-            ? (main_memory as Memory)
-            : devices.get(deviceID)!.memory;
+            deviceID !== null
+                ? devices.get(deviceID)!.memory
+                : isInProtectedRange(address)
+                ? (protected_memory as Memory)
+                : (main_memory as Memory);
+    // DEBUG: Elimina esto una vez arreglado
+    console.log(`[DEBUG] Escribiendo en: 0x${address.toString(16)} | Bytes: ${bytes}`);
+    console.log(`[DEBUG] Memoria seleccionada: ${memory === main_memory ? 'MAIN' : memory === protected_memory ? 'PROTECTED' : 'DEVICE'}`);
 
     const wordSize = memory.getWordSize();
 
@@ -116,12 +138,26 @@ function writeValueToMemory(
  */
 function readValueFromMemory(address: bigint, bytes: number): bigint {
     // get memory
+    if (isInProtectedRange(address)) {
+        if (!can_access_protected_memory()) {
+            raise(
+                "Segmentation fault. Read access denied for address '0x" +
+                    address.toString(16) +
+                    "'",
+            );
+            exit(true);
+        }
+    }
     const deviceID = checkDeviceAddr(Number(address));
     const memory =
-        deviceID === null
-            ? (main_memory as Memory)
-            : devices.get(deviceID)!.memory;
-
+            deviceID !== null
+                ? devices.get(deviceID)!.memory
+                : isInProtectedRange(address)
+                ? (protected_memory as Memory)
+                : (main_memory as Memory);
+    // DEBUG: Elimina esto una vez arreglado
+    console.log(`[DEBUG] Leyendo: 0x${address.toString(16)} | Bytes: ${bytes}`);
+    console.log(`[DEBUG] Memoria seleccionada: ${memory === main_memory ? 'MAIN' : memory === protected_memory ? 'PROTECTED' : 'DEVICE'}`);
     const wordSize = memory.getWordSize();
     if (bytes === 1) {
         // Single byte - read directly
@@ -354,3 +390,4 @@ export const MEM = {
         }
     },
 };
+

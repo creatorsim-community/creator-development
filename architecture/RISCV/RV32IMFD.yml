@@ -887,6 +887,9 @@ memory_layout:
   stack:
     start: 0x0FFFFFFC
     end: 0x0FFFFFFF
+  protected:
+    start: 0x06000000
+    end: 0x06FFFFFF  
 
 templates:
   - name: B

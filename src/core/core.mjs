@@ -91,6 +91,8 @@ export let REGISTERS_BACKUP = [];
 export const register_size_bits = 32; //TODO: load from architecture
 /** @type {Memory} */
 export let main_memory;
+/** @type {Memory} */
+export let protected_memory;
 /** @type {StackTracker} */
 export let stackTracker;
 /** @type {InterruptManager} */
@@ -204,6 +206,14 @@ export function loadArchitecture(architectureYaml, isa = []) {
         wordSize: WORDSIZE / BYTESIZE,
         memoryLayout: Object.entries(architecture.memory_layout),
         baseAddress: BigInt(minMemoryAddress),
+        endianness: ENDIANNESSARR,
+    });
+    protected_memory = new Memory({
+        sizeInBytes: 0x1000000, // 16MB
+        bitsPerByte: BYTESIZE,
+        wordSize: WORDSIZE / BYTESIZE,
+        memoryLayout: [],
+        baseAddress: BigInt(0x60000000),
         endianness: ENDIANNESSARR,
     });
 
