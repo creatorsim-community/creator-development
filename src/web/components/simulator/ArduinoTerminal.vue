@@ -147,7 +147,7 @@ import {
   pinLabels,
   switchBoard,
   esp32vect,
-} from "../../../core/capi/pinstates.mjs";
+} from "../../../core/capi/pinstates.mts";
 import {
   writeRegister,
   readRegister,
@@ -424,51 +424,71 @@ export default {
     },
 
     //Interrupts
-    handleInterruptClick(pinName) {
-      const pinNumber = parseInt(pinName.replace(/\D/g, ""));
+handleInterruptClick(pinName) {
+  // 1. Extraer el número del pin (ej: "GPIO9" -> 9)
+  const pinNumber = parseInt(pinName.replace(/\D/g, ""));
+  if (isNaN(pinNumber)) return;
 
-      if (isNaN(pinNumber)) return;
+  const targetPin = BigInt(pinNumber);
+  
+  // 2. Obtener la tabla de vectores (manejando la referencia de Vue)
+  const vectorTable = esp32vect.value;
+  let foundEntry = null;
 
-      // Search in interrupt vector
-      const targetPin = BigInt(pinNumber);
-      const index = esp32vect.value.findIndex(entry => entry[0] === targetPin);
+  // 3. Buscador manual (Sustituye a findIndex para evitar el TypeError)
+  // Iteramos sobre los 32 slots posibles
+  for (let i = 0; i < vectorTable.length; i++) {
+    const entry = vectorTable[i];
+    // entry[0] es el Pin almacenado
+    if (entry && entry[0] === targetPin) {
+      foundEntry = entry;
+      break; 
+    }
+  }
 
-      if (index !== -1) {
-        const [pin, isr, mode] = esp32vect.value[index];
-        console.log(`Pin: ${pin} | ISR: 0x${isr.toString(16)} | Modo: ${mode}`);
-        //Jump to ISR
-        var ret1 = crex_findReg("pc");
-        if (ret1.match === 0) {
-          throw packExecute(
-            true,
-            "capi_arduino: register pc not found",
-            "danger",
-            null,
-          );
-        }
-        var pc = BigInt.asIntN(
-          32,
-          readRegister(ret1.indexComp, ret1.indexElem),
-        );
-        //Save ra
-        var ret2 = crex_findReg("ra");
-        if (ret2.match === 0) {
-          throw packExecute(
-            true,
-            "capi_arduino: register ra not found",
-            "danger",
-            null,
-          );
-        }
-        writeRegister(BigInt(pc), ret2.indexComp, ret2.indexElem);
-        writeRegister(BigInt(isr), ret1.indexComp, ret1.indexElem);
-        coreEvents.emit("arduino-terminal-write", {
-          text: `[INTERRUPT DETECTED] Jumping to ISR at 0x${isr.toString(16)}`,
-        });
-      } else {
-        console.warn(`No interrupt with pin: ${pinName}`);
-      }
-    },
+  // 4. Si encontramos el pin y tiene una ISR válida
+  if (foundEntry) {
+    const [pin, isr, mode] = foundEntry;
+
+    // Validación crítica: No saltar si la ISR es 0 o no se ha inicializado
+    if (isr === 0n || isr === 0xffffn) {
+      console.warn(`[INTERRUPT] El pin ${pinName} tiene interrupción activa pero la dirección ISR es inválida (0x${isr.toString(16)})`);
+      return;
+    }
+
+    console.log(`[INTERRUPT] Ejecutando: Pin ${pin} -> ISR 0x${isr.toString(16)}`);
+
+    try {
+      // Obtener el registro PC
+      const retPc = crex_findReg("pc");
+      if (retPc.match === 0) throw new Error("PC register not found");
+
+      // Leer PC actual (donde debe volver el programa)
+      const currentPc = readRegister(retPc.indexComp, retPc.indexElem);
+
+      // Obtener el registro RA (para guardar el retorno)
+      const retRa = crex_findReg("ra");
+      if (retRa.match === 0) throw new Error("RA register not found");
+
+      // --- EL SALTO ---
+      // 1. Guardamos el PC actual en RA (para que mret o ret funcionen)
+      writeRegister(BigInt(currentPc), retRa.indexComp, retRa.indexElem);
+      
+      // 2. Escribimos la dirección de la ISR en el PC
+      writeRegister(BigInt(isr), retPc.indexComp, retPc.indexElem);
+
+      // Notificar a la terminal del simulador
+      coreEvents.emit("arduino-terminal-write", {
+        text: `[INTERRUPT] Jumping to ISR at 0x${isr.toString(16)} (Saved PC: 0x${currentPc.toString(16)})`,
+      });
+
+    } catch (e) {
+      console.error("Error durante el salto a la ISR:", e);
+    }
+  } else {
+    console.warn(`[INTERRUPT] No se encontró configuración en el vector para: ${pinName}`);
+  }
+},
   },
 };
 </script>

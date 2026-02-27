@@ -414,6 +414,7 @@ export async function load_CREATino() {
 
     //hide_loading();
     loadedCreatino = true;
+    loadedESP32C3Interr = false;
     coreEvents.emit("library-loaded");
   } catch (error) {
     throw new SyntaxError(`Invalid library format: ${error.message}`);
@@ -439,6 +440,7 @@ export async function load_ESP32C3_interrupts() {
 
     //hide_loading();
     loadedESP32C3Interr = true;
+    loadedCreatino = false;
     console.log("ESP32-C3 interrupt library loaded with global variables");
     coreEvents.emit("library-loaded");
   } catch (error) {

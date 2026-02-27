@@ -13,7 +13,7 @@ export interface BoardConfig {
 }
 const baseUrl = import.meta.env.BASE_URL;
 // Board definition
-const BOARDS: Record<string, BoardConfig> = {
+var BOARDS: Record<string, BoardConfig> = {
     esp32c3devkit2: {
         name: "ESP32-C3 DevKitC-02",
         svg: baseUrl + "maker/boards/esp32c3devkit2.svg",
@@ -109,16 +109,29 @@ const BOARDS: Record<string, BoardConfig> = {
 };
 
 // interrupt
-// Vector table for ESP32 (for demonstration, not fully implemented): [pin,ISR,MODE]
-let esp32vectRef = ref<[bigint, bigint, bigint][]>(
-    Array.from({ length: 32 }, () => [0n, 0n, 0n]),
-);
-const entry = esp32vectRef.value[0];
-if (entry) {
-    entry[0] = 0xffffn; // pin
-    entry[1] = 0xffffn; // isr
-    entry[2] = 0n; // mode
+const RAW_STORAGE = new BigUint64Array(32 * 3); // 32 slots * 3 columnas
+
+export const esp32vect = {
+    value: {
+        // Simulamos el comportamiento de un ref para no romper tu código
+        get length() { return 32; },
+        get [1]() { return [RAW_STORAGE[3], RAW_STORAGE[4], RAW_STORAGE[5]]; }, // Ejemplo
+    }
+};
+
+// Función para obtener los datos de forma segura
+export function getVectRow(index: number): bigint[] {
+    const base = index * 3;
+    return [RAW_STORAGE[base], RAW_STORAGE[base + 1], RAW_STORAGE[base + 2]];
 }
+
+export function setVectRow(index: number, pin: bigint, isr: bigint, mode: bigint) {
+    const base = index * 3;
+    RAW_STORAGE[base] = pin;
+    RAW_STORAGE[base + 1] = isr;
+    RAW_STORAGE[base + 2] = mode;
+}
+
 
 // States
 
@@ -126,11 +139,12 @@ if (entry) {
 const currentBoardKey = "esp32c3devkit2";
 
 export const activeBoard = ref(BOARDS[currentBoardKey]);
-export const pinStates: Ref<PinStateMap> = ref({
+export var pinStates: Ref<PinStateMap> = ref({
     ...BOARDS[currentBoardKey]?.initialStates,
 });
 export const pinLabels = ref(BOARDS[currentBoardKey]?.pinLabels);
-export const esp32vect = esp32vectRef; // Exportamos el vector de interrupciones
+
+
 
 // Change boards
 export function switchBoard(boardKey: string) {

@@ -25,7 +25,7 @@ import { sentinel } from "../sentinel/sentinel.mjs";
 import { checkDeviceAddr, devices } from "../executor/devices.mts";
 import type { Memory } from "../memory/Memory.mts";
 import { toHex } from "../utils/utils.mjs";
-import { can_access_protected_memory } from "../capi/espinterrupts.mjs"
+import { add_g_irq_to_graphic_interrupt, can_access_protected_memory } from "../capi/espinterrupts.mjs"
 
 /*
  *  CREATOR instruction description API:
@@ -72,9 +72,8 @@ function writeValueToMemory(
                 : isInProtectedRange(address)
                 ? (protected_memory as Memory)
                 : (main_memory as Memory);
-    // DEBUG: Elimina esto una vez arreglado
-    console.log(`[DEBUG] Escribiendo en: 0x${address.toString(16)} | Bytes: ${bytes}`);
-    console.log(`[DEBUG] Memoria seleccionada: ${memory === main_memory ? 'MAIN' : memory === protected_memory ? 'PROTECTED' : 'DEVICE'}`);
+    // console.log(`[DEBUG] Escribiendo en: 0x${address.toString(16)} | Bytes: ${bytes}`);
+    // console.log(`[DEBUG] Memoria seleccionada: ${memory === main_memory ? 'MAIN' : memory === protected_memory ? 'PROTECTED' : 'DEVICE'}`);
 
     const wordSize = memory.getWordSize();
 
@@ -103,6 +102,7 @@ function writeValueToMemory(
                 memory.write(address + BigInt(i), paddedByteArray[i]);
             }
         }
+        add_g_irq_to_graphic_interrupt(address, value);
         return paddedByteArray;
     } else {
         // Value spans multiple words
@@ -126,6 +126,7 @@ function writeValueToMemory(
             memory.writeWord(currentAddr, wordBytes);
             currentAddr += BigInt(wordSize);
         }
+        add_g_irq_to_graphic_interrupt(address, value);
         return paddedByteArray;
     }
 }

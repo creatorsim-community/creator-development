@@ -1796,7 +1796,9 @@ instructions:
       #   registers.pc += imm;
       #   CAPI.STACK.beginFrame();
       definition: |
-        if (CAPI.ARDUINO.check_arduino(imm,registers.pc) === false) {
+        const isArduino = CAPI.ARDUINO.check_arduino(imm, registers.pc);
+        const isInterrupt = CAPI.ESPINTERR.check_interr(imm, registers.pc);
+        if (!isInterrupt) {
         registers[rd] = registers.pc + 4n;
         registers.pc += imm;
         CAPI.STACK.beginFrame();

@@ -356,6 +356,7 @@ export default defineComponent({
         target_location: this.targetLocation,
         assembly: this.assembly_code,
         arduino: loadedCreatino,
+        interrupt: loadedESP32C3Interr,
       }).then(data => {
         this.stoprunning = false;
         const dataStr = JSON.stringify(data, null, 2);
@@ -398,6 +399,7 @@ export default defineComponent({
         target_location: this.targetLocation,
         assembly: this.assembly_code,
         arduino: loadedCreatino,
+        interrupt: loadedESP32C3Interr,
       }).then(data => {
         this.running = false;
         const dataStr = JSON.stringify(data, null, 2);
@@ -439,6 +441,7 @@ export default defineComponent({
         target_location: this.targetLocation,
         assembly: this.assembly_code,
         arduino: loadedCreatino,
+        interrupt: loadedESP32C3Interr,
       }).then(data => {
         this.debugging = false;
         const dataStr = JSON.stringify(data, null, 2);
@@ -491,6 +494,7 @@ export default defineComponent({
         target_location: this.targetLocation,
         assembly: this.assembly_code,
         arduino: loadedCreatino,
+        interrupt: loadedESP32C3Interr,
       }).then(data => {
         this.fullclean = false;
         const dataStr = JSON.stringify(data, null, 2);
