@@ -197,11 +197,19 @@ export default defineComponent({
       <!-- Maker Tab -->
       <button
         v-if="architecture_name.includes('RV32')"
+        :class="['tab', { active: current_reg_type === 'arduinoTerminal', border: dark }]"
+        @click="change_data_view('arduinoTerminal')"
+      >
+        <font-awesome-icon :icon="['fas', 'pen']" />
+        <span>Debug</span>
+      </button>
+      <button
+        v-if="architecture_name.includes('RV32')"
         :class="['tab', { active: current_reg_type === 'maker', border: dark }]"
         @click="change_data_view('maker')"
       >
         <font-awesome-icon :icon="['fas', 'infinity']" />
-        <span>Arduino</span>
+        <span>Maker</span>  
       </button>
     </div>
   </div>

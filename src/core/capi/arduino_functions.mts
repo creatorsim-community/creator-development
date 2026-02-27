@@ -17,7 +17,7 @@ import {
 } from "../executor/IO.mjs";
 import hookMap from "../../web/components/simulator/CreatinoMaker/components/BoardElements/esp32c3devkit2.js";
 import { pinStates, esp32vect } from "./pinstates.mjs";
-//import {connections,compState,svgRef,positions} from '../../web/components/simulator/CreatinoMaker/App.vue'
+// import {connections,compState,svgRef,positions} from '../../web/components/simulator/CreatinoMaker/App.vue'
 import {
     connections,
     positions,
