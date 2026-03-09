@@ -239,8 +239,10 @@ export default {
     });
 
     coreEvents.on("arduino-pin-interrupt", pinName => {
-      this.interrupt[pinName] = true;
-      console.log(`Interrupt set on pin ${pinName}`);
+      this.interrupt[pinName.pin] = true;
+    });
+    coreEvents.on("arduino-pin-detach-interrupt", pinName => {
+      delete this.interrupt[pinName.pin];
     });
   },
 
@@ -402,7 +404,7 @@ export default {
       document.body.style.cursor = "default";
     },
     onBoardChange() {
-      console.log("Changing to  board:", this.selectedBoard);
+      // Nothing
     },
     updatePinValue(event, pinName) {
       const rawValue = event.target.value;
@@ -417,7 +419,6 @@ export default {
 
       event.target.value = this.pinStates[pinName];
 
-      console.log(`Pin ${pinName} changed to:`, this.pinStates[pinName]);
     },
     handleBoardChange() {
       switchBoard(this.selectedBoard);

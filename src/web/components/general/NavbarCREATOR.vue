@@ -34,6 +34,7 @@ import type { Instruction } from "@/core/assembler/assembler";
 import type { BDropdown } from "bootstrap-vue-next";
 import { coreEvents, CoreEventTypes } from "../../../core/events.mts";
 import { remove_library, architecture, load_CREATino, load_ESP32C3_interrupts } from "@/core/core.mjs";
+import { createFile } from "../assembly/MultifileEditor.mjs";
 
 export default defineComponent({
   props: {
@@ -149,7 +150,7 @@ export default defineComponent({
         return true;
       }
       // Check if CreatorAssembler is in the list
-      return assemblers.some((asm: any) => asm.name === "CreatorAssembler");
+      return assemblers.some((asm: any) => (asm.name === "CreatorAssembler" || asm.name === "Sail"));
     },
 
     // Hide mobile navbar when selecting architecture
@@ -276,7 +277,13 @@ export default defineComponent({
       }
     },
     newAssembly() {
-      (this.$root as any).assembly_code = "";
+      if (architecture.config.name.includes("SRV")){
+        // Call modal to create new File
+        (this.$root as any).assembly_code = createFile((this.$root as any).assembly_code);
+      }else {
+        (this.$root as any).assembly_code = "";
+      }
+
     },
     removeLibrary() {
       remove_library();
@@ -544,7 +551,7 @@ export default defineComponent({
         <b-dropdown-item v-b-modal.flash>
           <font-awesome-icon :icon="['fab', 'usb']" class="me-2" /> Flash
         </b-dropdown-item>
-        <b-dropdown-item v-b-modal.calculator>
+        <b-dropdown-item v-b-modal.calculator_simulator>
           <font-awesome-icon :icon="['fas', 'calculator']" class="me-2" />
           IEEE754 Calculator
         </b-dropdown-item>
@@ -563,14 +570,14 @@ export default defineComponent({
       >
         <b-dropdown-item
           v-if="creator_mode === 'assembly'"
-          v-b-modal.examples-assembly
+          v-b-modal.examples_assembly
         >
           <font-awesome-icon :icon="['fas', 'file-lines']" class="me-2" />
           Examples...
         </b-dropdown-item>
         <b-dropdown-item
           v-if="creator_mode === 'simulator'"
-          v-b-modal.examples-simulator
+          v-b-modal.examples_simulator
         >
           <font-awesome-icon :icon="['fas', 'file-lines']" class="me-2" />
           Examples...

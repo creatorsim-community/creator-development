@@ -17,8 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with CREATOR.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <script>
-import { loadedCreatino } from "@/core/core.mjs";
+import { architecture, loadedCreatino } from "@/core/core.mjs";
 import { creator_ga } from "@/core/utils/creator_ga.mjs";
+import CacheInfo from "@/web/components/architecture/cache_memory/CacheInfo.vue";
+// document.app.$data.architecture.name = "RISCV Sail 32/64"
 
 export default {
   props: {
@@ -27,11 +29,37 @@ export default {
     autoscroll: { type: Boolean, default: false },
   },
 
+  components:{
+    CacheInfo
+  },
   data() {
-    return {
-      /*Instrutions table fields*/
-      archInstructions: ["Address", "userInstructions", "loadedInstructions"],
-    };
+    if (document.app.$data.architecture_name === "RISC-V Sail 32 - Full Specification" || document.app.$data.architecture_name === "RISC-V Sail 64 - Full Specification"){
+      switch(document.app.$data.cache_type) {
+        case 0:
+        case 1:
+          return {
+            /*Instrutions table fields*/
+            archInstructions: ["Address", "userInstructions", "loadedInstructions", "L1"],
+            sailArch: true,
+          };
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          return {
+            /*Instrutions table fields*/
+            archInstructions: ["Address", "userInstructions", "loadedInstructions", "L1", "L2",],
+            sailArch: true,
+          };  
+      }
+    } else {
+      return {
+        /*Instrutions table fields*/
+        archInstructions: ["Address", "userInstructions", "loadedInstructions",],
+        sailArch: false,
+      };
+    }
+    
   },
 
   computed: {
@@ -128,6 +156,9 @@ export default {
         this.$root.instructions[index].Break = null;
       }
     },
+    pptarget(addr, level, value) {
+      return (`${addr}-${level}-${value}`);
+    },
   },
 };
 </script>
@@ -149,7 +180,8 @@ export default {
     <!-- column headers -->
     <template #head(userInstructions)="_row"> User Instruction </template>
     <template #head(loadedInstructions)="_row"> Loaded Instructions </template>
-
+    <template v-if="sailArch" #head(L1)="_row"> L1 </template>
+    <template v-if="sailArch" #head(L2)="_row"> L2 </template>
     <!-- address -->
     <template #cell(Address)="row">
       <span
@@ -161,11 +193,11 @@ export default {
       <span v-else class="breakpoint-space">&nbsp;</span>
       <span>{{ row.item.Address }}</span>
       <b-badge
-        v-if="row.item.Label"
+        v-for="label in (typeof row.item.Label === 'string'? [row.item.Label] : row.item.Label)"
         pill
         variant="info"
         style="margin-left: 0.5em"
-        >{{ row.item.Label }}</b-badge
+        >{{ label }}</b-badge
       >
     </template>
 
@@ -207,6 +239,53 @@ export default {
           >next</b-badge
         >
       </div>
+    </template>
+
+    <template #cell(L1)="row">
+        <!-- Case was tick -->
+        <span v-if="(row.item.visible && (row.item.L1_I === 3 && row.item.L1_D === 0) || (row.item.L1_I === 0 && row.item.L1_D === 3) || (row.item.L1_I === 3 && row.item.L1_D === 3))" :id="pptarget(row.item.Address, 1, 3)" >
+          <font-awesome-icon icon="fa-solid fa-circle-check" />
+            <CacheInfo :target="pptarget(row.item.Address, 1, 3)" :instruction="row.item" :cache_type="'L1'" />
+        </span>
+        
+        <!-- Case was cross -->          
+        <span v-if="(row.item.visible && (row.item.L1_I === 4 && row.item.L1_D === 4) || (row.item.L1_I === 0 && row.item.L1_D === 4) || (row.item.L1_I === 4 && row.item.L1_D === 0))" :id="pptarget(row.item.Address, 1, 4)" >
+
+          <font-awesome-icon icon="fa-regular fa-circle-xmark" />
+          <CacheInfo :target="pptarget(row.item.Address, 1, 4)" :instruction="row.item" :cache_type="'L1'" />
+        </span>
+      
+
+      <!-- Case was warning -->
+        <span v-if="(row.item.visible && (row.item.L1_I === 1 || row.item.L1_D === 1) || (row.item.L1_I === 3 && row.item.L1_D === 4) || (row.item.L1_I === 4 && row.item.L1_D === 3))" :id="pptarget(row.item.Address, 1, 1)" >
+
+          <font-awesome-icon icon="fa-solid fa-circle-exclamation" />
+          <CacheInfo :target="pptarget(row.item.Address, 1, 1)" :instruction="row.item" :cache_type="'L1'" />
+        
+        </span>
+
+    </template>
+     
+
+    <template #cell(L2)="row">
+
+      <!-- Case was tick -->
+      <span  v-if="row.item.visible && (row.item.L2_I === 3 && row.item.L2_D === 0) || (row.item.L2_I === 0 && row.item.L2_D === 3) || (row.item.L2_I === 3 && row.item.L2_D === 3)" :id="pptarget(row.item.Address, 2, 3)"  >
+        <font-awesome-icon icon="fa-regular fa-circle-check" />
+        <CacheInfo :target="pptarget(row.item.Address, 2, 3)" :instruction="row.item" :cache_type="'L2'" />
+      </span>
+      
+        <!-- Case was cross -->
+      <span  v-if="row.item.visible && (row.item.L2_I === 4 && row.item.L2_D === 4) || (row.item.L2_I === 0 && row.item.L2_D === 4) || (row.item.L2_I === 4 && row.item.L2_D === 0)" :id="pptarget(row.item.Address, 2, 4)" >
+        <font-awesome-icon icon="fa-regular fa-circle-xmark" />
+        <CacheInfo :target="pptarget(row.item.Address, 2, 4)" :instruction="row.item" :cache_type="'L2'" />
+      </span>
+      
+      <!-- Case was warning -->
+      <span  v-if="row.item.visible && (row.item.L2_I === 1 || row.item.L2_D === 1) || (row.item.L2_I === 3 && row.item.L2_D === 4) || (row.item.L2_I === 4 && row.item.L2_D === 3)" :id="pptarget(row.item.Address, 2, 1)" >
+        <font-awesome-icon icon="fa-solid fa-circle-exclamation" />
+        <CacheInfo :target="pptarget(row.item.Address, 2, 1)" :instruction="row.item" :cache_type="'L2'" />
+      </span>
     </template>
   </b-table>
 </template>

@@ -32,6 +32,7 @@ export const CoreEventTypes = {
     LIBRARY_LOADED: "library-loaded",
     LIBRARY_REMOVED: "library-removed",
     EXECUTOR_BUTTONS_UPDATE: "executor-buttons-update",
+    PAUSE_EXEC: "pause-execution",
     ARDUINO_TERMINAL_WRITE: "arduino-terminal-write",
     ARDUINO_PIN_CHANGED: "arduino-pin-write",
     ARDUINO_RESET: "arduino-reset",
@@ -110,6 +111,8 @@ export type CoreEvents = {
     "arduino-pin-mode":ArduinoPinMode;
     /** Event is emmited when a pin is set up in an interrupt */
     "arduino-pin-interrupt":ArduinoPinInterruptEvent;
+    /** Emitted when a pin is detached from an interrupt */
+    "arduino-pin-detach-interrupt": ArduinoPinDetachInterruptEvent;
 };
 /**
  * Emitted when the simulator sends text to the Arduino Terminal
@@ -144,6 +147,13 @@ export interface ArduinoPinMode{
 export interface ArduinoPinInterruptEvent {
   /** The pin number */
   pin: string;
+}
+/**
+ * Emitted when a pin is detached from an interrupt
+ */
+export interface ArduinoPinDetachInterruptEvent {
+    /** The pin number */
+    pin: string;
 }
 
 /**
