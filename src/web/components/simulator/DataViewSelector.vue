@@ -21,8 +21,6 @@ import { defineComponent } from "vue";
 import { loadedCreatino } from "@/core/core.mjs";
 
 import { creator_ga } from "@/core/utils/creator_ga.mjs";
-import { loadedCreatino } from "@/core/core.mjs";
-
 export default defineComponent({
   props: {
     data_mode: { type: String, required: true },
